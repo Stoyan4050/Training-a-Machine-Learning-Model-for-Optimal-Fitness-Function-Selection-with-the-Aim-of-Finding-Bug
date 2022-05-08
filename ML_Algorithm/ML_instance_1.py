@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 
+from sklearn.manifold import TSNE
+from sklearn.decomposition import TruncatedSVD
 from sklearn.naive_bayes import GaussianNB
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
@@ -10,11 +12,11 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from sklearn.naive_bayes import GaussianNB
-from sklearn.dummy import DummyClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.preprocessing import MinMaxScaler
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split, cross_validate
@@ -22,6 +24,7 @@ from sklearn.utils.validation import check_is_fitted
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import f1_score, accuracy_score, make_scorer
 from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
 
 from sklearn.metrics import f1_score, accuracy_score
 from sklearn.model_selection import KFold
@@ -43,7 +46,9 @@ hyperparameter_tuning_scores = np.empty(0)
 best_scores = np.empty(0)
 
 # The K-fold cross validator we are going to use
-k_fold = KFold(n_splits=10)
+k_fold = KFold(n_splits=5)
+
+preprocess = ""
 
 
 def createDoublePlot(score1, score2, labels, leg1, leg2):
@@ -61,9 +66,31 @@ def createDoublePlot(score1, score2, labels, leg1, leg2):
     ax.legend()
     plt.show()
 
+def data_preprocessing(train_data):
+    global preprocess
+    train_data_c = train_data
+
+    pca = PCA()
+    train_data_c = pca.fit_transform(train_data)
+    preprocess = preprocess + " " + "PCA "
+
+    # tsne = TSNE()
+    # tsne_results = tsne.fit_transform(train_data)
+    # train_data_c = tsne_results
+    # preprocess = preprocess + " " + "TSNE "
+
+    return train_data_c
 
 def tune_hyperparams(estimator_name, estimator, estimator_params, base_score, train_data, train_labels, k_fold):
-    best_model_estimator = Pipeline([("pca", PCA()), (estimator_name, estimator)])
+    # DATA PREPROCESSING
+
+    pipe = Pipeline([
+        #("pca", PCA()),
+        ('LDA', LinearDiscriminantAnalysis()),
+        #('SVD', TruncatedSVD()),
+        (estimator_name, estimator)])
+    best_model_estimator = pipe
+
     best_model_score = base_score
     sum_scores = 0
 
@@ -72,8 +99,9 @@ def tune_hyperparams(estimator_name, estimator, estimator_params, base_score, tr
         Xtrain, Xtest = train_data[train_index], train_data[test_index]
         Ytrain, Ytest = train_labels[train_index], train_labels[test_index]
 
-        pipe = Pipeline([("pca", PCA()), (estimator_name, estimator)])
-        search = GridSearchCV(pipe, estimator_params, cv=10, return_train_score=True, n_jobs=-1, verbose=1,
+
+
+        search = GridSearchCV(pipe, estimator_params, cv=5, return_train_score=True, n_jobs=-1, verbose=2,
                               scoring="f1_macro")
 
         search.fit(Xtrain, Ytrain)
@@ -119,8 +147,8 @@ def all_models():
         "KNeighborsClassifier": KNeighborsClassifier(n_neighbors=3, weights="distance"),
         "SVM": SVC(C=10, kernel="poly", random_state=42),
         "DecisionTreeClassifier": DecisionTreeClassifier(max_depth=None, min_samples_leaf=2, random_state=42),
-        "LogisticRegression": LogisticRegression(C=10, random_state=42, penalty="none", max_iter=50000)
-
+        "LogisticRegression": LogisticRegression(C=10, random_state=42, penalty="none", max_iter=10000)
+        #"RandomForest"
     }
 
     assert "GaussianNB" in models and isinstance(models["GaussianNB"], GaussianNB), "There is no GaussianNB in models"
@@ -137,8 +165,7 @@ def all_models():
         convert_data(np.genfromtxt("results_difference_output_60_branch_60.csv", delimiter=',')[1:, 1:])).astype(int)
 
     np.set_printoptions(threshold=np.inf)
-    # print(train_data.shape)
-    # print(len(train_labels))
+    train_data = data_preprocessing(train_data)
 
     basic_parameters_algorithm(models, train_data, train_labels)
 
@@ -189,14 +216,14 @@ def perform_Gaussian_model_tuning(models, train_data, train_labels):
     # Gaussian
     # 8x8
     params = {
-        "pca__n_components": np.linspace(0.0, 0.99, 100)
+        # "pca__n_components": np.linspace(0.0, 0.99, 5)
     }
 
     mean_score, best_model_score, best_model_estimator = tune_hyperparams("gaussian",
                                                                           models["GaussianNB"],
                                                                           params,
-                                                                          basic_scores[0],
-                                                                          train_data, train_labels, k_fold)
+                                                                          basic_scores[0], train_data,
+                                                                          train_labels, k_fold)
 
     hyperparameter_tuning_scores = np.append(hyperparameter_tuning_scores, mean_score)
     best_estimators = np.append(best_estimators, best_model_estimator)
@@ -212,8 +239,8 @@ def perform_Knn_model_tuning(models, train_data, train_labels):
     # KNN
     # 8x8
     params = {
-        "pca__n_components": np.linspace(0.0, 0.99, 100),
-        "knn__n_neighbors": np.arange(2, 100),
+        # "pca__n_components": np.linspace(0.0, 0.99, 5),
+        "knn__n_neighbors": np.arange(2, 5),
         "knn__weights": ["uniform", "distance"]
     }
 
@@ -224,7 +251,7 @@ def perform_Knn_model_tuning(models, train_data, train_labels):
                                                                           train_labels, k_fold)
 
     hyperparameter_tuning_scores = np.append(hyperparameter_tuning_scores, mean_score)
-    best_estimators = np.append(best_estimators, best_model_estimator)
+    best_estimators = np.append(best_estimators, (best_model_estimator))
     best_scores = np.append(best_scores, best_model_score)
 
     print("be", best_estimators)
@@ -238,8 +265,8 @@ def perform_SVC_model_tuning(models, train_data, train_labels):
     # 8x8
     params = [
         {
-            "pca__n_components": np.linspace(0.0, 0.99, 50),
-            "svm__C": np.arange(start=1, stop=100, step=1),
+            # "pca__n_components": np.linspace(0.0, 0.99, 5),
+            "svm__C": np.arange(start=1, stop=5, step=1),
             "svm__kernel": ["poly", "sigmoid"],
             "svm__random_state": [42]
         }
@@ -266,15 +293,15 @@ def perform_DT_model_tuning(models, train_data, train_labels):
 
     params = [
         {
-            "pca__n_components": np.linspace(0.0, 0.99, 50),
-            "dt__max_depth": np.arange(start=1, stop=50, step=1),
-            "dt__min_samples_leaf": np.arange(start=1, stop=50, step=1),
+            # "pca__n_components": np.linspace(0.0, 0.99, 5),
+            "dt__max_depth": np.arange(start=1, stop=5, step=1),
+            "dt__min_samples_leaf": np.arange(start=1, stop=5, step=1),
             "dt__random_state": [42]
         },
         {
-            "pca__n_components": np.linspace(0.0, 0.99, 50),
+            # "pca__n_components": np.linspace(0.0, 0.99, 5),
             "dt__max_depth": [None],
-            "dt__min_samples_leaf": np.arange(start=1, stop=50, step=1),
+            "dt__min_samples_leaf": np.arange(start=1, stop=5, step=1),
             "dt__random_state": [42]
         }
     ]
@@ -301,8 +328,8 @@ def perform_LR_model_tuning(models, train_data, train_labels):
 
     params = [
         {
-            "pca__n_components": np.linspace(0.0, 0.99, 50),
-            "lr__C": np.arange(start=1, stop=50, step=0.2),
+            # "pca__n_components": np.linspace(0.0, 0.99, 5),
+            "lr__C": np.arange(start=1, stop=10, step=1),
             "lr__penalty": ["l1", "l2", "none"],
             "lr__random_state": [42],
             "lr__max_iter": [1000]
@@ -325,38 +352,55 @@ def perform_LR_model_tuning(models, train_data, train_labels):
 
 
 def get_results_from_tuning(train_data, train_labels):
-    global best_estimators, basic_scores
+    global best_estimators, basic_scores, hyperparameter_tuning_scores, k_fold, preprocess
 
+    # Change This
     best_estimators = best_estimators.reshape(int(best_estimators.size / 2), 2)
-    # print(best_estimators)
     final_scores = np.empty(0)
 
-    for model in (best_estimators):
+    print(train_data)
+    for model in best_estimators:
         sumScores = 0
-        print(model)
         for train_index, test_index in k_fold.split(train_data):
             Xtrain, Xtest = train_data[train_index], train_data[test_index]
             Ytrain, Ytest = train_labels[train_index], train_labels[test_index]
 
+            # Change this
             pipe = make_pipeline(model[0], model[1])
             pipe.fit(Xtrain, Ytrain)
             prediction = pipe.predict(Xtest)
 
             score = f1_score(Ytest, prediction, average="macro")
-            print("Best cv score", score)
+            # print("Best cv score", score)
             sumScores = sumScores + score
+            print("Pipe: ", pipe)
 
         score = sumScores / k_fold.get_n_splits()
         final_scores = np.append(final_scores, score)
-        print("Average Best Score: ", score)
+
         print("F1 score:", score, "\n")
 
-    print(basic_scores)
+    # print(basic_scores)
     createDoublePlot(final_scores, basic_scores, ["NaiveBayes", "KNN", "SVM", "DecTree", "LogRegr"],
                      "Best estimators", "Estimator with basic parameters")
 
+    # print(best_estimators)
+
     best_model = best_estimators[np.argmax(hyperparameter_tuning_scores)]
+
+
+    print(hyperparameter_tuning_scores)
     print(best_model)
-    pipe = make_pipeline(best_model[0], best_model[1])
-    pipe.fit(train_data, train_labels)
-    # prediction = pipe.predict(mnist_28x28_test)
+    print(final_scores)
+    save_results(best_model, np.max(hyperparameter_tuning_scores), preprocess)
+    # pipe = make_pipeline(best_model[0], best_model[1])
+    # pipe.fit(train_data, train_labels)
+
+def save_results(estimator, score, preprocess):
+    df1 = pd.read_csv("ML_res.csv")
+    data = {"Estimator": str(estimator), "Score": score, "Preprocess": preprocess}
+    df2 = pd.DataFrame(data=data, index=[1])
+    df_res = pd.concat([df1, df2], ignore_index=True)
+
+    df_res.to_csv("ML_res.csv", index=False)
+

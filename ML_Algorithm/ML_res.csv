@@ -1,0 +1,4 @@
+Estimator,Score,Preprocess
+[LinearDiscriminantAnalysis() GaussianNB()],0.3777033271420141, TSNE 
+[LinearDiscriminantAnalysis() GaussianNB()],0.3946781525353406,
+[LinearDiscriminantAnalysis() GaussianNB()],0.39452975741480933, PCA 
