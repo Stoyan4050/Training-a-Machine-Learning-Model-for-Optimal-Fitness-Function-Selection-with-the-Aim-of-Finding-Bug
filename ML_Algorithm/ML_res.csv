@@ -1,4 +1,33 @@
 Estimator,Score,Preprocess
 [LinearDiscriminantAnalysis() GaussianNB()],0.3777033271420141, TSNE 
 [LinearDiscriminantAnalysis() GaussianNB()],0.3946781525353406,
-[LinearDiscriminantAnalysis() GaussianNB()],0.39452975741480933, PCA 
+[LinearDiscriminantAnalysis() GaussianNB()],0.3945297574148093, PCA 
+[LinearDiscriminantAnalysis() GaussianNB()],0.3945297574148093, PCA 
+"[LinearDiscriminantAnalysis()
+ RandomForestClassifier(max_features=1, min_samples_leaf=5, min_samples_split=8,
+                        n_estimators=10, random_state=42)                       ]",0.3974736899658838, PCA 
+"[LinearDiscriminantAnalysis()
+ DecisionTreeClassifier(min_samples_leaf=3, random_state=42)]",0.4062464947171185, TSNE 
+"[LinearDiscriminantAnalysis()
+ KNeighborsClassifier(n_neighbors=3, weights='distance')]",0.3793156113303751, TSNE 
+"[LinearDiscriminantAnalysis()
+ RandomForestClassifier(max_features=1, min_samples_leaf=5, min_samples_split=8,
+                        n_estimators=10, random_state=42)                       ]",0.4056686133064675,
+"[PCA() DecisionTreeClassifier(min_samples_leaf=3, random_state=42)]",0.3774906113901554,
+"[LinearDiscriminantAnalysis()
+ RandomForestClassifier(max_features=1, min_samples_leaf=5, min_samples_split=8,
+                        n_estimators=10, random_state=42)                       ]",0.3974736899658838, PCA 
+"[TruncatedSVD() SVC(C=4, kernel='sigmoid', random_state=42)]",0.3744616608341501,
+"[TruncatedSVD() SVC(C=3, kernel='sigmoid', random_state=42)]",0.3876277857421487, PCA 
+"[LinearDiscriminantAnalysis()
+ RandomForestClassifier(max_features=1, min_samples_leaf=3, min_samples_split=10,
+                        n_estimators=10, random_state=42)                        ]",0.4024188946594719, TSNE 
+"[LinearDiscriminantAnalysis()
+ RandomForestClassifier(max_features=1, min_samples_leaf=3, min_samples_split=8,
+                        n_estimators=20, random_state=42)                       ]",0.3740371073823824, TSNE 
+"[LinearDiscriminantAnalysis()
+ KNeighborsClassifier(n_neighbors=4, weights='distance')]",0.3832146440142593, TSNE 
+[LinearDiscriminantAnalysis() GaussianNB()],0.3659706773041707, TSNE 
+"[LinearDiscriminantAnalysis()
+ RandomForestClassifier(max_features=1, min_samples_leaf=5, min_samples_split=8,
+                        n_estimators=10, random_state=42)                       ]",0.4056686133064675,
