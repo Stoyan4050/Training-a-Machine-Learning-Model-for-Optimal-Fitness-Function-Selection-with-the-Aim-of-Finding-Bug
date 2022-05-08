@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import ML_Algorithm.TuningClassifiersParameters as cp
+import ML_Algorithm.RegressionTuning as rt
 
 from sklearn.manifold import TSNE
 from sklearn.decomposition import TruncatedSVD
@@ -27,6 +27,17 @@ from sklearn.metrics import f1_score, accuracy_score, make_scorer
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import export_graphviz
+import sklearn.metrics as metrics
+from sklearn.linear_model import LinearRegression
+from lightgbm import LGBMRegressor
+from xgboost.sklearn import XGBRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.kernel_ridge import KernelRidge
+from sklearn.linear_model import ElasticNet
+from sklearn.linear_model import BayesianRidge
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.svm import SVR
 
 from sklearn.metrics import f1_score, accuracy_score
 from sklearn.model_selection import KFold
@@ -70,9 +81,9 @@ def data_preprocessing(train_data):
     # train_data_c = tsne_results
     # preprocess = preprocess + " " + "TSNE "
 
-    # sc = StandardScaler()
-    # train_data_c = sc.fit_transform(train_data)
-    # preprocess = preprocess + " " + "StandardScaler "
+    sc = StandardScaler()
+    train_data_c = sc.fit_transform(train_data)
+    preprocess = preprocess + " " + "StandardScaler "
 
 
     return train_data_c
@@ -88,26 +99,16 @@ def convert_data(data):
 
 def all_models():
     models = {
-        "GaussianNB": GaussianNB(),
-        "KNeighborsClassifier": KNeighborsClassifier(n_neighbors=3, weights="distance"),
-        "SVM": SVC(C=10, kernel="poly", random_state=42),
-        "DecisionTreeClassifier": DecisionTreeClassifier(max_depth=None, min_samples_leaf=2, random_state=42),
-        "LogisticRegression": LogisticRegression(C=10, random_state=42, penalty="none", max_iter=10000),
-        "RandomForest": RandomForestClassifier(random_state=42, max_depth=None, min_samples_leaf=2)
+        "BayesianRidge": BayesianRidge(),
+        "LinearRegression": LinearRegression(),
+        "SVR": SVR(),
+        "DecisionTreeRegressor": DecisionTreeRegressor(),
+        "GradientBoostingRegressor": GradientBoostingRegressor(),
+        "RandomForestRegressor": RandomForestRegressor(),
+        "KernelRidge": KernelRidge(),
+        "ElasticNet": ElasticNet(),
+        "XGBRegressor": XGBRegressor()
     }
-    print(models["RandomForest"].get_params().keys())
-
-    assert "GaussianNB" in models and isinstance(models["GaussianNB"], GaussianNB), "There is no GaussianNB in models"
-    assert "DecisionTreeClassifier" in models and isinstance(models["DecisionTreeClassifier"],
-                                                             DecisionTreeClassifier), "There is no DecisionTreeClassifier in models"
-    assert "KNeighborsClassifier" in models and isinstance(models["KNeighborsClassifier"],
-                                                           KNeighborsClassifier), "There is no KNeighborsClassifier in models"
-    assert "SVM" in models and isinstance(models["SVM"], SVC), "There is no SVC in models"
-    assert "LogisticRegression" in models and isinstance(models["LogisticRegression"],
-                                                         LogisticRegression), "There is no LogisticRegression in models"
-
-    assert "RandomForest" in models and isinstance(models["RandomForest"],
-                                                         RandomForestClassifier), "There is no RandomForestClassifier in models"
 
     train_data = np.genfromtxt("combine_metrics_output_60_branch_60.csv", delimiter=',')[1:, 1:]
     train_labels = np.array(
@@ -120,19 +121,22 @@ def all_models():
 
     basic_scores = basic_parameters_algorithm(models, train_data, train_labels, k_fold)
 
-    tuning = cp.ClassifiersParameters(hyperparameter_tuning_scores=np.empty(0),
+    tuning = rt.RegressionParameters(hyperparameter_tuning_scores=np.empty(0),
                                       best_estimators=np.empty(0), best_scores=np.empty(0),
                                       basic_scores=basic_scores, k_fold=k_fold)
 
 
 
     # Hyper Parameter Tuning
-    tuning.perform_Gaussian_model_tuning(models, train_data, train_labels)
-    tuning.perform_Knn_model_tuning(models, train_data, train_labels)
-    tuning.perform_SVC_model_tuning(models, train_data, train_labels)
-    tuning.perform_DT_model_tuning(models, train_data, train_labels)
+    tuning.perform_BayesianRidge_model_tuning(models, train_data, train_labels)
     tuning.perform_LR_model_tuning(models, train_data, train_labels)
+    tuning.perform_SVR_model_tuning(models, train_data, train_labels)
+    tuning.perform_DT_model_tuning(models, train_data, train_labels)
+    tuning.perform_GBR_model_tuning(models, train_data, train_labels)
     tuning.perform_RF_model_tuning(models, train_data, train_labels)
+    tuning.perform_KR_model_tuning(models, train_data, train_labels)
+    tuning.perform_EN_model_tuning(models, train_data, train_labels)
+    tuning.perform_XGB_model_tuning(models, train_data, train_labels)
 
     # Get results
     get_results_from_tuning(train_data, train_labels, tuning)
@@ -156,13 +160,13 @@ def basic_parameters_algorithm(models, train_data, train_labels, k_fold):
             pipe.fit(Xtrain, Ytrain)
             prediction = pipe.predict(Xtest)
 
-            score = f1_score(Ytest, prediction, average="macro")
+            score = metrics.r2_score(Ytest, prediction, )
             print(name, "    ", score)
             sumScores = sumScores + score
 
         score = sumScores / k_fold.get_n_splits()
         basic_scores = np.append(basic_scores, score)
-        print("F1 score:", score, "\n")
+        print("R2 score:", score, "\n")
 
     print(basic_scores)
     print(names)
@@ -176,6 +180,7 @@ def get_results_from_tuning(train_data, train_labels, tuning):
     final_scores = np.empty(0)
 
     # print(best_estimators)
+    print(len(best_estimators))
     for model in best_estimators:
         sumScores = 0
         for train_index, test_index in tuning.k_fold.split(train_data):
@@ -187,7 +192,7 @@ def get_results_from_tuning(train_data, train_labels, tuning):
             pipe.fit(Xtrain, Ytrain)
             prediction = pipe.predict(Xtest)
 
-            score = f1_score(Ytest, prediction, average="macro")
+            score = metrics.r2_score(Ytest, prediction)
             # print("Best cv score", score)
             sumScores = sumScores + score
             print("Pipe: ", pipe)
@@ -195,10 +200,12 @@ def get_results_from_tuning(train_data, train_labels, tuning):
         score = sumScores / tuning.k_fold.get_n_splits()
         final_scores = np.append(final_scores, score)
 
-        print("F1 score:", score, "\n")
+        print("R2 score:", score, "\n")
 
     # print(basic_scores)
-    createDoublePlot(tuning.hyperparameter_tuning_scores, tuning.basic_scores, ["NaiveBayes", "KNN", "SVM", "DecTree", "LogRegr", "RandomForest"],
+
+    createDoublePlot(tuning.hyperparameter_tuning_scores, tuning.basic_scores, ["Bayesian", "LR", "SVR", "DecTree", "GBR", "RandomForest",
+                                                                                "KernelRidge", "ElasticNet", "XGBRegressor"],
                      "Best estimators", "Estimator with basic parameters")
 
     # print(best_estimators)
@@ -210,29 +217,17 @@ def get_results_from_tuning(train_data, train_labels, tuning):
     print(tuning.hyperparameter_tuning_scores)
     save_results(best_model, np.max(tuning.hyperparameter_tuning_scores), preprocess)
 
-    print("Loading_Model")
-    visualize_tree(best_estimators[-1][1][1], train_labels)
+    # print("Loading_Model")
+    # visualize_tree(best_estimators[-1][1][1], train_labels)
     # pipe = make_pipeline(best_model[0], best_model[1])
     # pipe.fit(train_data, train_labels)
 
 def save_results(estimator, score, preprocess):
-    df1 = pd.read_csv("ML_res.csv")
+    df1 = pd.read_csv("ML_res_regr.csv")
     data = {"Estimator": str(estimator), "Score": score, "Preprocess": preprocess}
     df2 = pd.DataFrame(data=data, index=[1])
     df_res = pd.concat([df1, df2], ignore_index=True)
 
-    df_res.to_csv("ML_res.csv", index=False)
+    df_res.to_csv("ML_res_regr.csv", index=False)
 
-def visualize_tree(estimator, train_labels):
-    os.environ["PATH"] += os.pathsep + 'D:\\PROGRAMS\\Graphviz\\bin\\'
-    # Export as dot file
-    export_graphviz(estimator, out_file='tree.dot',
-                    #["WMC", "DIT", "NOC", "CBO", "RFC", "LCOM", "Ca", "Ce", "NPM", "LCOM3", "LOC", "DAM", "MOA", "MFA","CAM", "IC", "CBM", "AMC"]
-                    feature_names=["Feature_1", "Feature_2"],
-                    class_names=["-1", "0", "1"],
-                    rounded=True, proportion=False,
-                    precision=2, filled=True)
-
-    # Convert to png using system command (requires Graphviz)
-    call(['dot', '-Tpng', 'tree.dot', '-o', 'tree.png', '-Gdpi=600'])
 
