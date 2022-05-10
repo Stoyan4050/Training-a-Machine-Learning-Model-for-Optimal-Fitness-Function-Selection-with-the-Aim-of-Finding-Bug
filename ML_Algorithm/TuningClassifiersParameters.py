@@ -58,8 +58,8 @@ class ClassifiersParameters:
         # DATA PREPROCESSING
 
         pipe = Pipeline([
-            # ("pca", PCA()),
-            ('LDA', LinearDiscriminantAnalysis()),
+            #("pca", PCA()),
+            #('LDA', LinearDiscriminantAnalysis()),
             #('SVD', TruncatedSVD()),
             (estimator_name, estimator)])
         best_model_estimator = pipe
@@ -182,15 +182,31 @@ class ClassifiersParameters:
         params = [
             {
                 # "pca__n_components": np.linspace(0.0, 0.99, 5),
-                "dt__max_depth": np.arange(start=1, stop=5, step=1),
-                "dt__min_samples_leaf": np.arange(start=1, stop=5, step=1),
-                "dt__random_state": [42]
-            },
+                "dt__max_depth": np.arange(start=1, stop=20, step=1),
+                "dt__citerion": ["gini", "entropy"],
+                "dt__splitter": ["best", "random"],
+                "dt__min_samples_leaf": np.arange(start=1, stop=20, step=1),
+                "dt__min_samples_split": np.arange(start=1, stop=20, step=1),
+                "dt__min_weight_fraction_leaf": np.arange(start=0.0, stop=5, step=0.5),
+                "dt__max_features": ["auto", "sqrt", "log2"],
+                "dt__max_leaf_nodes": np.arange(start=1, stop=20, step=1),
+                "dt__min_impurity_decrease": np.arange(start=0.0, stop=5, step=0.5),
+                "dt__class_weight":  [{0: 1, 1: 1}, {0: 1, 1: 5}, {0: 1, 1: 1}, {0: 1, 1: 1}]
+
+        },
             {
                 # "pca__n_components": np.linspace(0.0, 0.99, 5),
                 "dt__max_depth": [None],
-                "dt__min_samples_leaf": np.arange(start=1, stop=5, step=1),
-                "dt__random_state": [42]
+                "dt__citerion": ["gini", "entropy"],
+                "dt__splitter": ["best", "random"],
+                "dt__min_samples_leaf": np.arange(start=1, stop=20, step=1),
+                "dt__min_samples_split": np.arange(start=1, stop=20, step=1),
+                "dt__min_weight_fraction_leaf": np.arange(start=0.0, stop=5, step=0.5),
+                "dt__max_features": ["auto", "sqrt", "log2"],
+                "dt__max_leaf_nodes": np.arange(start=1, stop=20, step=1),
+                "dt__min_impurity_decrease": np.arange(start=0.0, stop=5, step=0.5),
+                "dt__class_weight": [{0: 1, 1: 1}, {0: 1, 1: 5}, {0: 1, 1: 1}, {0: 1, 1: 1}]
+
             }
         ]
 

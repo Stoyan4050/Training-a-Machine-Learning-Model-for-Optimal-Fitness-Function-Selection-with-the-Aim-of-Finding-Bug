@@ -61,6 +61,10 @@ def data_preprocessing(train_data):
     global preprocess
     train_data_c = train_data
 
+    # sc = StandardScaler()
+    # train_data_c = sc.fit_transform(train_data)
+    # preprocess = preprocess + " " + "StandardScaler "
+
     # pca = PCA()
     # train_data_c = pca.fit_transform(train_data)
     # preprocess = preprocess + " " + "PCA "
@@ -70,9 +74,7 @@ def data_preprocessing(train_data):
     # train_data_c = tsne_results
     # preprocess = preprocess + " " + "TSNE "
 
-    # sc = StandardScaler()
-    # train_data_c = sc.fit_transform(train_data)
-    # preprocess = preprocess + " " + "StandardScaler "
+
 
 
     return train_data_c
@@ -109,9 +111,15 @@ def all_models():
     assert "RandomForest" in models and isinstance(models["RandomForest"],
                                                          RandomForestClassifier), "There is no RandomForestClassifier in models"
 
-    train_data = np.genfromtxt("combine_metrics_output_60_branch_60.csv", delimiter=',')[1:, 1:]
+    train_data = np.genfromtxt("ReadyForML/metrics_twbranch_60_output_60.csv", delimiter=',')[1:, 1:]
     train_labels = np.array(
-        convert_data(np.genfromtxt("results_difference_output_60_branch_60.csv", delimiter=',')[1:, 1:])).astype(int)
+        convert_data(np.genfromtxt("ReadyForML/results_difference_twbranch_60_output_60.csv", delimiter=',')[1:, 1:])).astype(int)
+
+    # train_data = np.genfromtxt("ReadyForML/metrics_twdefault_300_output_300.csv", delimiter=',')[1:, 1:]
+    train_data = train_data[1:, 1:]
+    train_data = np.nan_to_num(train_data, nan=0)
+    # train_labels = np.array(
+    #     convert_data(np.genfromtxt("ReadyForML/results_difference_twdefault_300_output_300.csv", delimiter=',')[1:, 1:])).astype(int)
 
     np.set_printoptions(threshold=np.inf)
     train_data = data_preprocessing(train_data)
@@ -172,7 +180,7 @@ def get_results_from_tuning(train_data, train_labels, tuning):
     global preprocess
 
     # Change This
-    best_estimators = tuning.best_estimators.reshape(int(tuning.best_estimators.size / 2), 2)
+    best_estimators = tuning.best_estimators.reshape(int(tuning.best_estimators.size / 1), 1)
     final_scores = np.empty(0)
 
     # print(best_estimators)
@@ -183,7 +191,7 @@ def get_results_from_tuning(train_data, train_labels, tuning):
             Ytrain, Ytest = train_labels[train_index], train_labels[test_index]
 
             # Change this
-            pipe = make_pipeline(model[0], model[1])
+            pipe = make_pipeline(model[0])
             pipe.fit(Xtrain, Ytrain)
             prediction = pipe.predict(Xtest)
 
@@ -211,7 +219,7 @@ def get_results_from_tuning(train_data, train_labels, tuning):
     save_results(best_model, np.max(tuning.hyperparameter_tuning_scores), preprocess)
 
     print("Loading_Model")
-    visualize_tree(best_estimators[-1][1][1], train_labels)
+    #visualize_tree(best_estimators[-1][1][1], train_labels)
     # pipe = make_pipeline(best_model[0], best_model[1])
     # pipe.fit(train_data, train_labels)
 

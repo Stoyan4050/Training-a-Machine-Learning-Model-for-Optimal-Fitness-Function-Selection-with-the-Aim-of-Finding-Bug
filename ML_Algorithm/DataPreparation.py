@@ -30,8 +30,9 @@ def compute_difference_coverage(criteria1, criteria2, save_metrics=False):
 
 
 def compute_difference_coverage_st(criteria1, criteria2, save_metrics=False):
-    df1 = pd.read_csv("StatisticalTestResults/BranchStatTest/res_tests_w_ob_" + criteria1 + ".csv")
-    df2 = pd.read_csv("StatisticalTestResults/BranchStatTest/res_tests_w_ob_" + criteria2 + ".csv")
+    df1 = pd.read_csv("StatisticalTestResults/DefaultStatTest/res_tests_tw_od_" + criteria1 + ".csv")
+    df2 = pd.read_csv("StatisticalTestResults/DefaultStatTest/res_tests_tw_od_" + criteria2 + ".csv")
+    df_metrics = pd.read_csv("StatisticalTestResults/DefaultStatTest/metrics_chosen_classes_tw_default300.csv")
 
     df_res = pd.DataFrame([])
 
@@ -42,22 +43,24 @@ def compute_difference_coverage_st(criteria1, criteria2, save_metrics=False):
             df2_perf = curr_df2.iloc[0][curr_df2.columns[1]] # out
 
             difference = df1_perf - df2_perf
-            label = 0
 
             if difference > 0:
                 label = -1
+                data = {"TARGET_CLASS": df1.iloc[i]["TARGET_CLASS"], "Difference": label}
+                df_diff = pd.DataFrame(data=data, index=[0])
+                df_res = pd.concat([df_res, df_diff], ignore_index=True)
+
             elif difference < 0:
                 label = 1
+                data = {"TARGET_CLASS": df1.iloc[i]["TARGET_CLASS"], "Difference": label}
+                df_diff = pd.DataFrame(data=data, index=[0])
+                df_res = pd.concat([df_res, df_diff], ignore_index=True)
             else:
-                label = 0
-                print("PROBLEM")
-
-            data = {"TARGET_CLASS": df1.iloc[i]["TARGET_CLASS"], "Difference": label}
-            df_diff = pd.DataFrame(data=data, index=[0])
-            df_res = pd.concat([df_res, df_diff], ignore_index=True)
+                df_metrics.drop(df_metrics.index[df_metrics['class'] == df1.iloc[i]["TARGET_CLASS"]], inplace=True)
 
     if save_metrics:
-        df_res.to_csv('results_difference_w' + criteria1 + "_" + criteria2 + '.csv', index=False)
+        df_metrics.to_csv('metrics_tw' + criteria1 + "_" + criteria2 + '.csv', index=False)
+        df_res.to_csv('results_difference_tw' + criteria1 + "_" + criteria2 + '.csv', index=False)
 
 
 

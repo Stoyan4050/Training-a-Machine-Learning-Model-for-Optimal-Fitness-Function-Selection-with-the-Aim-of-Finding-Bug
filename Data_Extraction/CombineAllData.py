@@ -47,7 +47,7 @@ def all_metrics_for_classes_with_test_results(criteria, classes_given=None, save
 
     if save_metrics:
         df_res1 = df_res.drop(df.columns[[0]], axis=1)
-        df_res1.to_csv('metrics_chosen_classes_w_' + criteria + '.csv', index=False)
+        df_res1.to_csv('metrics_chosen_classes_tw_' + criteria + '.csv', index=False)
 
     return no_data_classes
 
@@ -101,7 +101,7 @@ def compute_average_data(criteria, classes_given=None):
             df_res_mean = pd.concat([df_res_mean, df_mean])
 
     df_res_mean.reset_index(drop=True, inplace=True)
-    df_res_mean.to_csv('res_tests_w_ob_' + criteria + '.csv', index=False)
+    df_res_mean.to_csv('res_tests_tw_ob_' + criteria + '.csv', index=False)
 
 
 def remove_common_el_lists(list1, list2):

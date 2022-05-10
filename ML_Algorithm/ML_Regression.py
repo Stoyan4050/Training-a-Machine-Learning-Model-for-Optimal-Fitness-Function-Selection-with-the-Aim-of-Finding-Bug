@@ -81,6 +81,9 @@ def data_preprocessing(train_data):
     # train_data_c = tsne_results
     # preprocess = preprocess + " " + "TSNE "
 
+    # sc = StandardScaler()
+    # train_data_c = sc.fit_transform(train_data)
+    # preprocess = preprocess + " " + "StandardScaler "
 
 
     return train_data_c
@@ -107,15 +110,17 @@ def all_models():
         "XGBRegressor": XGBRegressor()
     }
 
-    train_data = np.genfromtxt("StatisticalTestResults/BranchStatTest/metrics_chosen_classes_w_branch.csv", delimiter=',')[1:, 1:]
+    train_data = np.genfromtxt("ReadyForML/metrics_twdefault_300_output_300.csv", delimiter=',')[1:, 1:]
     train_data = train_data[1:, 1:]
+    train_data = np.nan_to_num(train_data, nan=0)
     train_labels = np.array(
-        convert_data(np.genfromtxt("results_difference_wbranch_60_output_60.csv", delimiter=',')[1:, 1:])).astype(int)
+        convert_data(np.genfromtxt("ReadyForML/results_difference_twdefault_300_output_300.csv", delimiter=',')[1:, 1:])).astype(int)
 
+    np.set_printoptions(threshold=np.inf)
     print(train_data)
     print(train_labels)
 
-    np.set_printoptions(threshold=np.inf)
+
     train_data = data_preprocessing(train_data)
 
     k_fold = KFold(n_splits=5)

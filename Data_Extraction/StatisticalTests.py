@@ -157,6 +157,9 @@ def prepare_data_for_st(criteria1, criteria2, fill_till_10_test = False):
             if np.array_equal(data_needed_crit1, data_needed_crit2):
                 print("skip class")
             else:
+                print(c)
+                print(data_needed_crit1)
+                print(data_needed_crit2)
                 t_test(data_needed_crit1, data_needed_crit2, c)
         else:
             # wilcoxon-test
@@ -172,7 +175,7 @@ def prepare_data_for_st(criteria1, criteria2, fill_till_10_test = False):
 
     ad.compute_average_data(criteria1, ap_classes)
     ad.compute_average_data(criteria2, ap_classes)
-    ad.all_metrics_for_classes_with_test_results(criteria="branch", classes_given=ap_classes, save_metrics=True)
+    ad.all_metrics_for_classes_with_test_results(criteria="branch300", classes_given=ap_classes, save_metrics=True)
 
     #df_res_mean.reset_index(drop=True, inplace=True)
     #df_res_mean.to_csv('res_tests_' + criteria + '.csv', index=False)

@@ -70,4 +70,34 @@ Estimator,Score,Preprocess
                            min_weight_fraction_leaf=0.5)         ]",-0.0750379005844842, StandardScaler 
 "[LinearDiscriminantAnalysis()
  GradientBoostingRegressor(max_leaf_nodes=3, min_samples_split=8,
-                           min_weight_fraction_leaf=0.5)         ]",0.14621550444341908,
+                           min_weight_fraction_leaf=0.5)         ]",0.146215504443419,
+"[LinearDiscriminantAnalysis()
+ GradientBoostingRegressor(max_leaf_nodes=3, min_samples_split=8,
+                           min_weight_fraction_leaf=0.5)         ]",0.146215504443419,
+"[LinearDiscriminantAnalysis()
+ GradientBoostingRegressor(max_leaf_nodes=10, min_samples_split=8,
+                           min_weight_fraction_leaf=0.25)         ]",-0.5269815680195207,
+"[BayesianRidge(fit_intercept=False, lambda_1=0.001, n_iter=1000)]",-0.1174105659929107,
+"[DecisionTreeRegressor(criterion='friedman_mse', max_depth=3, max_features=3,
+                       max_leaf_nodes=10, min_samples_split=10,
+                       min_weight_fraction_leaf=0,
+                       random_state=RandomState(MT19937) at 0x1B2ABBE3E40)   ]",0.1399274327245259,
+"[DecisionTreeRegressor(criterion='friedman_mse', max_depth=3, max_leaf_nodes=10,
+                       min_samples_split=8, min_weight_fraction_leaf=0.5,
+                       random_state=RandomState(MT19937) at 0x174F86F3E40)      ]",-0.1365341054727323,
+[BayesianRidge()],1.0,
+[BayesianRidge()],1.0,
+"[DecisionTreeRegressor(criterion='friedman_mse', max_depth=3, max_leaf_nodes=10,
+                       min_samples_split=8, min_weight_fraction_leaf=0,
+                       random_state=RandomState(MT19937) at 0x272F6773E40)      ]",-0.3285788399410849,
+[SVR(C=1)],-0.0184854033364966,
+[LinearDiscriminantAnalysis() SVR(C=1)],-0.027540148941873, TSNE 
+"[LinearDiscriminantAnalysis()
+ GradientBoostingRegressor(max_leaf_nodes=3, min_samples_split=8,
+                           min_weight_fraction_leaf=0.5)         ]",-0.0530572973207507, PCA 
+"[LinearDiscriminantAnalysis()
+ GradientBoostingRegressor(max_leaf_nodes=3, min_samples_split=8,
+                           min_weight_fraction_leaf=0.5)         ]",-0.0341488621411243, StandardScaler 
+"[LinearDiscriminantAnalysis()
+ GradientBoostingRegressor(max_leaf_nodes=3, min_samples_split=8,
+                           min_weight_fraction_leaf=0.5)         ]",-0.03414886214112436,

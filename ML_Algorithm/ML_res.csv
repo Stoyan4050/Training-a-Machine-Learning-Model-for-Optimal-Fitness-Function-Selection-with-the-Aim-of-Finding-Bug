@@ -55,4 +55,44 @@ Estimator,Score,Preprocess
 "[DecisionTreeRegressor(criterion='friedman_mse', max_depth=3, max_features=3,
                        max_leaf_nodes=10, min_samples_split=8,
                        min_weight_fraction_leaf=0.5,
-                       random_state=RandomState(MT19937) at 0x2069A523E40)   ]",-0.07847631415077796,
+                       random_state=RandomState(MT19937) at 0x2069A523E40)   ]",-0.0784763141507779,
+[LinearDiscriminantAnalysis() KNeighborsClassifier(n_neighbors=2)],0.4913382881208968,
+"[PCA() SVC(C=1, kernel='sigmoid', random_state=42)]",0.5802592592592593,
+[TruncatedSVD() KNeighborsClassifier(n_neighbors=3)],0.5802592592592593,
+[LinearDiscriminantAnalysis() GaussianNB()],0.5802592592592593, TSNE 
+[PCA() GaussianNB()],0.5802592592592593, TSNE 
+[PCA() GaussianNB()],0.5947811447811449, StandardScaler 
+[LinearDiscriminantAnalysis() KNeighborsClassifier(n_neighbors=2)],0.4913382881208968, StandardScaler 
+[TruncatedSVD() GaussianNB()],0.6465780998389694, StandardScaler 
+[TruncatedSVD() GaussianNB()],0.6465780998389694, PCA  StandardScaler 
+[LinearDiscriminantAnalysis() GaussianNB()],0.5802592592592593, TSNE 
+[PCA() GaussianNB()],0.5802592592592593, TSNE 
+"[PCA() DecisionTreeClassifier(max_depth=1, random_state=42)]",0.6256296296296296, StandardScaler  TSNE 
+[LinearDiscriminantAnalysis() KNeighborsClassifier(n_neighbors=3)],0.5802592592592593, StandardScaler  TSNE 
+[LinearDiscriminantAnalysis() GaussianNB()],0.5802592592592593, StandardScaler  TSNE 
+"[LinearDiscriminantAnalysis()
+ DecisionTreeClassifier(min_samples_leaf=2, random_state=42)]",0.3689580210254282, TSNE 
+[LinearDiscriminantAnalysis() GaussianNB()],0.61, TSNE 
+"[PCA()
+ RandomForestClassifier(max_depth=3, max_features=1, min_samples_leaf=3,
+                        min_samples_split=8, n_estimators=10, random_state=42)]",0.4207925407925408, TSNE 
+[LinearDiscriminantAnalysis() KNeighborsClassifier(n_neighbors=2)],0.5286075036075036,
+"[TruncatedSVD() SVC(C=4, kernel='sigmoid', random_state=42)]",0.7605555555555557,
+[TruncatedSVD() GaussianNB()],0.5759090909090909, StandardScaler 
+[TruncatedSVD() KNeighborsClassifier(n_neighbors=3)],0.6034188034188033, PCA 
+[LinearDiscriminantAnalysis() GaussianNB()],0.5103030303030304, TSNE 
+"[PCA() SVC(C=1, kernel='sigmoid', random_state=42)]",0.6973076923076923, TSNE 
+"[PCA() SVC(C=3, kernel='sigmoid', random_state=42)]",0.6959090909090909, StandardScaler 
+[LinearDiscriminantAnalysis() KNeighborsClassifier(n_neighbors=2)],0.5730519480519481, StandardScaler 
+"[SVC(C=3, kernel='sigmoid', random_state=42)]",0.6959090909090909, StandardScaler 
+[KNeighborsClassifier(n_neighbors=3)],0.5805616605616606, PCA 
+"[DecisionTreeClassifier(max_depth=3, max_features=1, min_samples_leaf=4,
+                        min_samples_split=8, random_state=1608637542)   ]",0.6389743589743591, TSNE 
+"[SVC(C=3, kernel='sigmoid', random_state=42)]",0.4098834498834499, TSNE 
+[LinearDiscriminantAnalysis() KNeighborsClassifier(n_neighbors=2)],0.5730519480519481, StandardScaler 
+"[TruncatedSVD() SVC(C=4, kernel='sigmoid', random_state=42)]",0.7605555555555557,
+"[TruncatedSVD() KNeighborsClassifier(n_neighbors=4, weights='distance')]",0.4273809523809523,
+"[DecisionTreeClassifier(max_depth=3, max_features=3, min_samples_leaf=3,
+                        min_samples_split=8, random_state=1608637542)   ]",0.6557142857142857,
+"[SVC(C=1, kernel='sigmoid', random_state=42)]",0.5802592592592593,
+"[SVC(C=4, kernel='sigmoid', random_state=42)]",0.7436075036075036,
