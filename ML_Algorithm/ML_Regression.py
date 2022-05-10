@@ -81,9 +81,6 @@ def data_preprocessing(train_data):
     # train_data_c = tsne_results
     # preprocess = preprocess + " " + "TSNE "
 
-    sc = StandardScaler()
-    train_data_c = sc.fit_transform(train_data)
-    preprocess = preprocess + " " + "StandardScaler "
 
 
     return train_data_c
@@ -110,9 +107,13 @@ def all_models():
         "XGBRegressor": XGBRegressor()
     }
 
-    train_data = np.genfromtxt("combine_metrics_output_60_branch_60.csv", delimiter=',')[1:, 1:]
+    train_data = np.genfromtxt("StatisticalTestResults/BranchStatTest/metrics_chosen_classes_w_branch.csv", delimiter=',')[1:, 1:]
+    train_data = train_data[1:, 1:]
     train_labels = np.array(
-        convert_data(np.genfromtxt("results_difference_output_60_branch_60.csv", delimiter=',')[1:, 1:])).astype(int)
+        convert_data(np.genfromtxt("results_difference_wbranch_60_output_60.csv", delimiter=',')[1:, 1:])).astype(int)
+
+    print(train_data)
+    print(train_labels)
 
     np.set_printoptions(threshold=np.inf)
     train_data = data_preprocessing(train_data)

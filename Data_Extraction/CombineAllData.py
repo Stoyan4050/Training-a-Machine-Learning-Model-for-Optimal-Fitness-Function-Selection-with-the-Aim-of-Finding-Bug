@@ -26,16 +26,20 @@ def get_appropriate_classes(criteria):
     return all_classes
 
 
-def all_metrics_for_classes_with_test_results(criteria, save_metrics=False):
-    df = pd.read_csv("all_metrics.csv")
-    classes = get_appropriate_classes(criteria)
+def all_metrics_for_classes_with_test_results(criteria, classes_given=None, save_metrics=False):
+    df = pd.read_csv("class_metrics.csv")
+
+    if classes_given is None:
+        classes = get_appropriate_classes(criteria)
+    else:
+        classes = classes_given
     # df.iloc[:, 1].values.tolist()
     no_data_classes = []
     df_res = pd.DataFrame([])
     counter = 0
     for c in classes:
         counter += 1
-        curr = df.loc[df["class_name"] == c]
+        curr = df.loc[df["class"] == c]
         if curr.empty:
             no_data_classes.append(c)
         df_res = pd.concat([df_res, curr], ignore_index=True)
@@ -43,12 +47,12 @@ def all_metrics_for_classes_with_test_results(criteria, save_metrics=False):
 
     if save_metrics:
         df_res1 = df_res.drop(df.columns[[0]], axis=1)
-        df_res1.to_csv('metrics_chosen_classes_' + criteria + '.csv', index=False)
+        df_res1.to_csv('metrics_chosen_classes_w_' + criteria + '.csv', index=False)
 
     return no_data_classes
 
 
-def compute_average_data(criteria):
+def compute_average_data(criteria, classes_given=None):
     COLUMNS_TO_SKIP = ["criterion", "configuration_id", "Random_Seed", "Total_Goals", "Total_Branches", "Lines",
                        "Covered_Goals", "Generations", "Statements_Executed", "Fitness_Evaluations", "Tests_Executed",
                        "Total_Time", "Size", "Result_Size", "Length", "Result_Length", "Total_Branches_Real",
@@ -57,11 +61,15 @@ def compute_average_data(criteria):
     COLUMNS_TO_AVG = ["BranchCoverage"]
 
     df = pd.read_csv("combined_results_" + criteria + ".csv")
-    classes = get_appropriate_classes(criteria)
+    if classes_given is None:
+        classes = get_appropriate_classes(criteria)
+    else:
+        classes = classes_given
+
     df_res_mean = pd.DataFrame([])
 
-    no_data_classes = all_metrics_for_classes_with_test_results(criteria)
-    classes = remove_common_el_lists(classes, no_data_classes)
+    # no_data_classes = all_metrics_for_classes_with_test_results(criteria)
+    # classes = remove_common_el_lists(classes, no_data_classes)
     for c in classes:
         df1_class = df.loc[df["TARGET_CLASS"] == c]
         if not df1_class.empty:
@@ -71,13 +79,29 @@ def compute_average_data(criteria):
             mean_values["TARGET_CLASS"] = c
 
             for crit in COLUMNS_TO_AVG:
-                mean_values[crit] = df_res1[crit].mean()
+                # Median here
+                kk2 = df_res1[crit]
+                count = len(kk2)
+                while count < 10:
+                    count+=1
+                    print("Less than 10 tests")
+                    kk2.loc[count] = 0.0
+
+                mean_values[crit] = kk2.median()
+
+            df_mean = pd.DataFrame(data=mean_values, index=[0])
+            df_res_mean = pd.concat([df_res_mean, df_mean])
+        else:
+            mean_values = {}
+            mean_values["TARGET_CLASS"] = c
+            for crit in COLUMNS_TO_AVG:
+                mean_values[crit] = 0.0
 
             df_mean = pd.DataFrame(data=mean_values, index=[0])
             df_res_mean = pd.concat([df_res_mean, df_mean])
 
     df_res_mean.reset_index(drop=True, inplace=True)
-    df_res_mean.to_csv('res_tests_' + criteria + '.csv', index=False)
+    df_res_mean.to_csv('res_tests_w_ob_' + criteria + '.csv', index=False)
 
 
 def remove_common_el_lists(list1, list2):

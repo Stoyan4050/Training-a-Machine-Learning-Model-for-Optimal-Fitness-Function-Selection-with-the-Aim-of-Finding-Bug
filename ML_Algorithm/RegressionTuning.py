@@ -70,8 +70,8 @@ class RegressionParameters:
 
         pipe = Pipeline([
             #("pca", PCA()),
-            #('LDA', LinearDiscriminantAnalysis()),
-            ('SVD', TruncatedSVD()),
+            ('LDA', LinearDiscriminantAnalysis()),
+            #('SVD', TruncatedSVD()),
             (estimator_name, estimator)])
         best_model_estimator = pipe
 
@@ -309,7 +309,7 @@ class RegressionParameters:
         print("best_estimators", self.best_estimators)
         print("ms", self.hyperparameter_tuning_scores)
         print("bs", self.best_scores)
-        self.visualize_tree(best_model_estimator[1][0])
+        #self.visualize_tree(best_model_estimator[1][0])
 
     def perform_KR_model_tuning(self, models, train_data, train_labels):
         # RandomForest

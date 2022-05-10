@@ -68,3 +68,6 @@ Estimator,Score,Preprocess
 "[TruncatedSVD()
  GradientBoostingRegressor(max_leaf_nodes=3, min_samples_split=8,
                            min_weight_fraction_leaf=0.5)         ]",-0.0750379005844842, StandardScaler 
+"[LinearDiscriminantAnalysis()
+ GradientBoostingRegressor(max_leaf_nodes=3, min_samples_split=8,
+                           min_weight_fraction_leaf=0.5)         ]",0.14621550444341908,
