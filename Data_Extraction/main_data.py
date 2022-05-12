@@ -1,6 +1,6 @@
-from Data_Extraction import CombineAllData as ad
-from Data_Extraction import ExtractTestResults as tr
-from Data_Extraction import  StatisticalTests as st
+import CombineAllData as ad
+import ExtractTestResults as tr
+import StatisticalTests as st
 
 metrics = ""
 
@@ -11,5 +11,5 @@ if __name__ == '__main__':
     #ad.create_csv_from_class_metrics()
     # ad.all_metrics_for_classes_with_test_results(criteria="output_60", save_metrics=True)
     #ad.compute_average_data(criteria="branch_60")
-    st.prepare_data_for_st(criteria1="default_300", criteria2="output_300")
+    #st.prepare_data_for_st(criteria1="default_300", criteria2="output_300")
     #st.prepare_data_for_st(criteria1="default_60", criteria2="output_60")

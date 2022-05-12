@@ -1,6 +1,6 @@
-from ML_Algorithm import ML_instance_1 as ml
-from ML_Algorithm import DataPreparation as dp
-from ML_Algorithm import ML_Regression as mr
+import ML_instance_1 as ml
+import DataPreparation as dp
+import ML_Regression as mr
 metrics = ""
 
 if __name__ == '__main__':

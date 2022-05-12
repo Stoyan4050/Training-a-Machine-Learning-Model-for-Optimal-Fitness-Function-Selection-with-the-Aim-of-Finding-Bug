@@ -1,4 +1,4 @@
-import Data_Extraction.ClassMetrics as ClassMetrics
+import ClassMetrics as ClassMetrics
 import pandas as pd
 import os
 

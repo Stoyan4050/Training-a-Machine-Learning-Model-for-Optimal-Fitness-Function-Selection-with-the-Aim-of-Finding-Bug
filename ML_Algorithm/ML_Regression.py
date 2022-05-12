@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import ML_Algorithm.RegressionTuning as rt
+import RegressionTuning as rt
 
 from sklearn.manifold import TSNE
 from sklearn.decomposition import TruncatedSVD
@@ -25,7 +25,7 @@ from sklearn.utils.validation import check_is_fitted
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import f1_score, accuracy_score, make_scorer
 from sklearn.model_selection import GridSearchCV
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
 from sklearn.tree import export_graphviz
 import sklearn.metrics as metrics
 from sklearn.linear_model import LinearRegression
@@ -38,6 +38,10 @@ from sklearn.linear_model import BayesianRidge
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.svm import SVR
+from sklearn.svm import LinearSVC
+from sklearn.feature_selection import SelectFromModel
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import chi2
 
 from sklearn.metrics import f1_score, accuracy_score
 from sklearn.model_selection import KFold
@@ -68,7 +72,7 @@ def createDoublePlot(score1, score2, labels, leg1, leg2):
     ax.legend()
     plt.show()
 
-def data_preprocessing(train_data):
+def data_preprocessing(train_data, train_labels):
     global preprocess
     train_data_c = train_data
 
@@ -84,6 +88,24 @@ def data_preprocessing(train_data):
     # sc = StandardScaler()
     # train_data_c = sc.fit_transform(train_data)
     # preprocess = preprocess + " " + "StandardScaler "
+    print(train_data.shape)
+    print(train_labels.shape)
+
+    #train_data_c = SelectKBest(chi2, k=3).fit_transform(train_data, train_labels)
+
+    # lsvc = LinearSVC(C=0.01, penalty="l1", dual=False).fit(train_data, train_labels)
+    # model = SelectFromModel(lsvc, prefit=True)
+    # train_data_c = model.transform(train_data)
+
+    # clf = ExtraTreesClassifier(n_estimators=3)
+    # clf = clf.fit(train_data, train_labels)
+    # model = SelectFromModel(clf, prefit=True)
+    # train_data_c = model.transform(train_data)
+
+    # forest = RandomForestClassifier(random_state=0)
+    # forest.fit(train_data, train_labels)
+    # model = SelectFromModel(forest, prefit=True)
+    # train_data_c = model.transform(train_data)
 
 
     return train_data_c
@@ -110,18 +132,19 @@ def all_models():
         "XGBRegressor": XGBRegressor()
     }
 
-    train_data = np.genfromtxt("ReadyForML/metrics_twdefault_300_output_300.csv", delimiter=',')[1:, 1:]
-    train_data = train_data[1:, 1:]
+    train_data = np.genfromtxt("ReadyForML/metrics_twbranch_60_output_60.csv", delimiter=',')[1:, 2:]
+    #train_data = train_data[:, :]
     train_data = np.nan_to_num(train_data, nan=0)
     train_labels = np.array(
-        convert_data(np.genfromtxt("ReadyForML/results_difference_twdefault_300_output_300.csv", delimiter=',')[1:, 1:])).astype(int)
+        convert_data(np.genfromtxt("ReadyForML/results_difference_twbranch_60_output_60.csv", delimiter=',')[1:, 1:])).astype(int)
 
     np.set_printoptions(threshold=np.inf)
     print(train_data)
     print(train_labels)
 
 
-    train_data = data_preprocessing(train_data)
+    train_data = data_preprocessing(train_data, train_labels)
+
 
     k_fold = KFold(n_splits=5)
 
@@ -182,7 +205,7 @@ def get_results_from_tuning(train_data, train_labels, tuning):
     global preprocess
 
     # Change This
-    best_estimators = tuning.best_estimators.reshape(int(tuning.best_estimators.size / 2), 2)
+    best_estimators = tuning.best_estimators.reshape(int(tuning.best_estimators.size / 1), 1)
     final_scores = np.empty(0)
 
     # print(best_estimators)
@@ -194,7 +217,7 @@ def get_results_from_tuning(train_data, train_labels, tuning):
             Ytrain, Ytest = train_labels[train_index], train_labels[test_index]
 
             # Change this
-            pipe = make_pipeline(model[0], model[1])
+            pipe = make_pipeline(model[0])
             pipe.fit(Xtrain, Ytrain)
             prediction = pipe.predict(Xtest)
 

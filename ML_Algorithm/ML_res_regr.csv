@@ -100,4 +100,19 @@ Estimator,Score,Preprocess
                            min_weight_fraction_leaf=0.5)         ]",-0.0341488621411243, StandardScaler 
 "[LinearDiscriminantAnalysis()
  GradientBoostingRegressor(max_leaf_nodes=3, min_samples_split=8,
-                           min_weight_fraction_leaf=0.5)         ]",-0.03414886214112436,
+                           min_weight_fraction_leaf=0.5)         ]",-0.0341488621411243,
+"[LinearDiscriminantAnalysis()
+ GradientBoostingRegressor(max_leaf_nodes=3, min_samples_split=8,
+                           min_weight_fraction_leaf=0.5)         ]",-0.0341488621411243,
+[PCA() SVR(C=1)],-0.020427484964201,
+[TruncatedSVD() SVR(C=1)],-0.0210084774071726,
+"[DecisionTreeRegressor(criterion='friedman_mse', max_depth=3, max_features=3,
+                       max_leaf_nodes=3, min_samples_split=8,
+                       min_weight_fraction_leaf=0.5,
+                       random_state=RandomState(MT19937) at 0x1E9F7611E40)   ]",-0.2130219515881869,
+"[DecisionTreeRegressor(criterion='friedman_mse', max_depth=3, max_leaf_nodes=10,
+                       min_samples_split=10, min_weight_fraction_leaf=0,
+                       random_state=RandomState(MT19937) at 0x1FAF6541E40)      ]",-0.1426187653201121,
+"[DecisionTreeRegressor(criterion='friedman_mse', max_depth=3, max_leaf_nodes=10,
+                       min_samples_split=8, min_weight_fraction_leaf=0.25,
+                       random_state=RandomState(MT19937) at 0x23297831E40)      ]",0.036573610280708754,

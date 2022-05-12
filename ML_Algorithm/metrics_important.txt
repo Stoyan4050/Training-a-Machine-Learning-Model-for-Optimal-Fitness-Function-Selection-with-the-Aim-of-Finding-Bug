@@ -1,0 +1,17 @@
+['wmc' 'lcom' 'numbersQty' 'mathOperationsQty' 'variablesQty' 'modifiers']
+
+['cbo' 'cboModified' 'fanout' 'rfc' 'protectedMethodsQty' 'totalFieldsQty'
+ 'nosi' 'loopQty' 'tryCatchQty' 'parenthesizedExpsQty' 'mathOperationsQty'
+ 'anonymousClassesQty' 'lambdasQty']
+
+['cbo' 'cboModified' 'fanin' 'fanout' 'wmc' 'rfc' 'lcom' 'lcom*'
+ 'totalMethodsQty' 'privateMethodsQty' 'visibleMethodsQty'
+ 'totalFieldsQty' 'privateFieldsQty' 'loc' 'returnQty' 'loopQty'
+ 'tryCatchQty' 'parenthesizedExpsQty' 'stringLiteralsQty' 'numbersQty'
+ 'assignmentsQty' 'mathOperationsQty' 'uniqueWordsQty']
+
+['wmc' 'lcom' 'totalMethodsQty' 'loc' 'returnQty' 'stringLiteralsQty'
+ 'modifiers']
+
+['wmc' 'lcom' 'loc' 'stringLiteralsQty' 'modifiers']
+

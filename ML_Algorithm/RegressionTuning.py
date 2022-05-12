@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import ML_Algorithm.RegressionTuning as rt
+import RegressionTuning as rt
 
 from sklearn.manifold import TSNE
 from sklearn.decomposition import TruncatedSVD
@@ -70,8 +70,9 @@ class RegressionParameters:
 
         pipe = Pipeline([
             #("pca", PCA()),
-            ('LDA', LinearDiscriminantAnalysis()),
+            #('LDA', LinearDiscriminantAnalysis()),
             #('SVD', TruncatedSVD()),
+
             (estimator_name, estimator)])
         best_model_estimator = pipe
 

@@ -51,7 +51,7 @@ class ClassifiersParameters:
         self.best_estimators = best_estimators
         self.best_scores = best_scores
         self.basic_scores = basic_scores
-        self.k_fold  = k_fold
+        self.k_fold = k_fold
 
 
     def tune_hyperparams(self, estimator_name, estimator, estimator_params, base_score, train_data, train_labels, k_fold):
@@ -180,32 +180,32 @@ class ClassifiersParameters:
         # DecisionTreeClassifier
 
         params = [
+        #     {
+        #         # "pca__n_components": np.linspace(0.0, 0.99, 5),
+        #         "dt__max_depth": np.arange(start=1, stop=20, step=1),
+        #         "dt__criterion": ["gini", "entropy"],
+        #         "dt__splitter": ["best", "random"],
+        #         "dt__min_samples_leaf": np.arange(start=1, stop=20, step=1),
+        #         "dt__min_samples_split": np.arange(start=1, stop=20, step=1),
+        #         "dt__min_weight_fraction_leaf": np.arange(start=0.0, stop=5, step=0.5),
+        #         "dt__max_features": ["auto", "sqrt", "log2"],
+        #         "dt__max_leaf_nodes": np.arange(start=1, stop=20, step=1),
+        #         "dt__min_impurity_decrease": np.arange(start=0.0, stop=5, step=0.5),
+        #         "dt__class_weight":  [{0: 1, 1: 1}, {0: 1, 1: 5}, {0: 1, 1: 1}, {0: 1, 1: 1}]
+        #
+        # },
             {
                 # "pca__n_components": np.linspace(0.0, 0.99, 5),
-                "dt__max_depth": np.arange(start=1, stop=20, step=1),
-                "dt__citerion": ["gini", "entropy"],
+                "dt__max_depth": [None, 2, 3, 4, 6, 8],
+                "dt__criterion": ["gini", "entropy"],
                 "dt__splitter": ["best", "random"],
-                "dt__min_samples_leaf": np.arange(start=1, stop=20, step=1),
-                "dt__min_samples_split": np.arange(start=1, stop=20, step=1),
-                "dt__min_weight_fraction_leaf": np.arange(start=0.0, stop=5, step=0.5),
-                "dt__max_features": ["auto", "sqrt", "log2"],
-                "dt__max_leaf_nodes": np.arange(start=1, stop=20, step=1),
-                "dt__min_impurity_decrease": np.arange(start=0.0, stop=5, step=0.5),
-                "dt__class_weight":  [{0: 1, 1: 1}, {0: 1, 1: 5}, {0: 1, 1: 1}, {0: 1, 1: 1}]
-
-        },
-            {
-                # "pca__n_components": np.linspace(0.0, 0.99, 5),
-                "dt__max_depth": [None],
-                "dt__citerion": ["gini", "entropy"],
-                "dt__splitter": ["best", "random"],
-                "dt__min_samples_leaf": np.arange(start=1, stop=20, step=1),
-                "dt__min_samples_split": np.arange(start=1, stop=20, step=1),
-                "dt__min_weight_fraction_leaf": np.arange(start=0.0, stop=5, step=0.5),
-                "dt__max_features": ["auto", "sqrt", "log2"],
-                "dt__max_leaf_nodes": np.arange(start=1, stop=20, step=1),
-                "dt__min_impurity_decrease": np.arange(start=0.0, stop=5, step=0.5),
-                "dt__class_weight": [{0: 1, 1: 1}, {0: 1, 1: 5}, {0: 1, 1: 1}, {0: 1, 1: 1}]
+                "dt__min_samples_leaf": np.arange(start=1, stop=20, step=2),
+                "dt__min_samples_split": np.arange(start=1, stop=20, step=2),
+                # "dt__min_weight_fraction_leaf": np.arange(start=0.0, stop=5, step=1),
+                # "dt__max_features": ["auto", "sqrt", "log2"],
+                # "dt__max_leaf_nodes": np.arange(start=1, stop=20, step=1),
+                # "dt__min_impurity_decrease": np.arange(start=0.0, stop=5, step=0.5),
+                # "dt__class_weight": [{0: 1, 1: 1}, {0: 1, 1: 5}, {0: 1, 1: 1}, {0: 1, 1: 1}]
 
             }
         ]
