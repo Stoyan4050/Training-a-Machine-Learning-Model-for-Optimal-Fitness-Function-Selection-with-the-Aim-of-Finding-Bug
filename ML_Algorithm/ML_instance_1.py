@@ -165,7 +165,6 @@ def convert_data(data):
     list = []
     for l in data:
         list.append(l[0].astype('float'))
-
     return list
 
 
