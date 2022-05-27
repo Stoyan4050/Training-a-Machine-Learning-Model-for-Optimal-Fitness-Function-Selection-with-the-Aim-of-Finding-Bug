@@ -69,6 +69,20 @@ def createDoublePlot(score1, score2, labels, leg1, leg2):
     ax.legend()
     plt.show()
 
+def createSinglePlot(score, labels):
+    x = np.arange(len(labels))
+    width = 0.4
+
+    fig, ax = plt.subplots(figsize=(16, 8))
+    rects1 = ax.bar(x, score, width, label="classifiers")
+    ax.set_ylabel('Scores')
+    ax.set_title('Performance of estimators')
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels)
+
+    ax.legend()
+    plt.show()
+
 def data_preprocessing(train_data, train_labels):
     global preprocess
     train_data_c = train_data
@@ -155,12 +169,6 @@ def checking_for_outliers(x, y):
     return np.array(x_new), np.array(y_new)
 
 
-def data_balancing(x, y):
-    ada = RandomOverSampler()
-    x_train, y_train = ada.fit_resample(x, y)
-
-    return x_train, y_train
-
 def convert_data(data):
     list = []
     for l in data:
@@ -211,18 +219,18 @@ def all_models():
     np.set_printoptions(threshold=np.inf)
     k_fold = KFold(n_splits=5)
 
-    train_data, features = data_preprocessing(train_data, train_labels)
+    print(train_data.shape)
 
+    train_data, features = data_preprocessing(train_data, train_labels)
     #train_data, train_labels = checking_for_outliers(train_data, train_labels)
 
+    print(train_data.shape)
 
     print("FEAT",features)
 
-    basic_scores = basic_parameters_algorithm(models, train_data, train_labels, k_fold)
 
     tuning = cp.ClassifiersParameters(hyperparameter_tuning_scores=np.empty(0),
-                                      best_estimators=np.empty(0), best_scores=np.empty(0),
-                                      basic_scores=basic_scores, k_fold=k_fold)
+                                      best_estimators=np.empty(0), best_scores=np.empty(0), k_fold=k_fold)
 
 
     # Hyper Parameter Tuning
@@ -239,90 +247,51 @@ def all_models():
     get_results_from_tuning(train_data, train_labels, tuning, features)
 
 
-def basic_parameters_algorithm(models, train_data, train_labels, k_fold):
-    names = np.empty(0)
-    basic_scores = np.empty(0)
-
-    for name, model in models.items():
-
-        print(name, ":")
-        sumScores = 0
-        names = np.append(names, name)
-
-        for train_index, test_index in k_fold.split(train_data):
-            Xtrain, Xtest = train_data[train_index], train_data[test_index]
-            Ytrain, Ytest = train_labels[train_index], train_labels[test_index]
-
-            Xtrain, Ytrain = data_balancing(Xtrain, Ytrain)
-            #Xtrain, Ytrain = checking_for_outliers(Xtrain, Ytrain)
-            pipe = make_pipeline(model)
-            pipe.fit(Xtrain, Ytrain)
-            prediction = pipe.predict(Xtest)
-
-            score = f1_score(Ytest, prediction, average="macro")
-            print(name, "    ", score)
-            sumScores = sumScores + score
-
-        score = sumScores / k_fold.get_n_splits()
-        basic_scores = np.append(basic_scores, score)
-        print("F1 score:", score, "\n")
-
-        # if name  == "DecisionTreeClassifier":
-        #     #visualize_tree(model)
-        #     tree.plot_tree(model)
-        #     plt.show()
-
-    print(basic_scores)
-    print(names)
-    return basic_scores
-
 def get_results_from_tuning(train_data, train_labels, tuning, features):
     global preprocess
 
     # Change This
     best_estimators = tuning.best_estimators.reshape(int(tuning.best_estimators.size / 2), 2)
-    final_scores = np.empty(0)
+    # final_scores = np.empty(0)
 
     # print(best_estimators)
-    for model in best_estimators:
-        sumScores = 0
-        for train_index, test_index in tuning.k_fold.split(train_data):
-            Xtrain, Xtest = train_data[train_index], train_data[test_index]
-            Ytrain, Ytest = train_labels[train_index], train_labels[test_index]
-            Xtrain, Ytrain = data_balancing(Xtrain, Ytrain)
-            #checking_for_outliers(Xtrain, Ytrain)
-            # Change this
-            pipe = make_pipeline(model[0], model[1])
-            pipe.fit(Xtrain, Ytrain)
-            prediction = pipe.predict(Xtest)
-
-            score = f1_score(Ytest, prediction, average="macro")
-            # print("Best cv score", score)
-            sumScores = sumScores + score
-            print("Pipe: ", pipe)
-
-        score = sumScores / tuning.k_fold.get_n_splits()
-        final_scores = np.append(final_scores, score)
-
-        print("F1 score:", score, "\n")
+    # for model in best_estimators:
+    #     sumScores = 0
+    #     for train_index, test_index in tuning.k_fold.split(train_data):
+    #         Xtrain, Xtest = train_data[train_index], train_data[test_index]
+    #         Ytrain, Ytest = train_labels[train_index], train_labels[test_index]
+    #         Xtrain, Ytrain = data_balancing(Xtrain, Ytrain)
+    #         #checking_for_outliers(Xtrain, Ytrain)
+    #         # Change this
+    #         pipe = make_pipeline(model[0], model[1])
+    #         pipe.fit(Xtrain, Ytrain)
+    #         prediction = pipe.predict(Xtest)
+    #
+    #         score = f1_score(Ytest, prediction, average="macro")
+    #         # print("Best cv score", score)
+    #         sumScores = sumScores + score
+    #         print("Pipe: ", pipe)
+    #
+    #     score = sumScores / tuning.k_fold.get_n_splits()
+    #     final_scores = np.append(final_scores, score)
+    #
+    #     print("F1 score:", score, "\n")
 
     # print(basic_scores)
-    createDoublePlot(tuning.hyperparameter_tuning_scores, tuning.basic_scores, ["NaiveBayes", "KNN", "SVM", "DecTree", "LogRegr", "RandomForest", "GradientBoost", "XGB"],
-                     "Best estimators", "Estimator with basic parameters")
+    # createDoublePlot(tuning.hyperparameter_tuning_scores, tuning.basic_scores, ["NaiveBayes", "KNN", "SVM", "DecTree", "LogRegr", "RandomForest", "GradientBoost", "XGB"],
+    #                  "Best estimators", "Estimator with basic parameters")
 
-    # print(best_estimators)
-
+    createSinglePlot(tuning.hyperparameter_tuning_scores, ["NaiveBayes", "KNN", "SVM", "DecTree", "LogRegr", "RandomForest", "GradientBoost", "XGB"])
     best_model = best_estimators[np.argmax(tuning.hyperparameter_tuning_scores)]
-    print(final_scores)
+    # print(final_scores)
     print(best_model)
 
     print(tuning.hyperparameter_tuning_scores)
     save_results(best_model, np.max(tuning.hyperparameter_tuning_scores), preprocess)
 
-    print("Loading_Model")
     # visualize_tree(best_estimators[3][0], features)
-    pipe = make_pipeline(best_model[0], best_model[1])
-    pipe.fit(train_data, train_labels)
+    # pipe = make_pipeline(best_model[0], best_model[1])
+    # pipe.fit(train_data, train_labels)
 
 def save_results(estimator, score, preprocess):
     df1 = pd.read_csv("ML_res.csv")

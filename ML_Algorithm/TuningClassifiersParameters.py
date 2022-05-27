@@ -53,31 +53,30 @@ class ClassifiersParameters:
     k_fold = None
 
 
-    def __init__(self, hyperparameter_tuning_scores, best_estimators, best_scores, basic_scores, k_fold):
+    def __init__(self, hyperparameter_tuning_scores, best_estimators, best_scores, k_fold):
         self.hyperparameter_tuning_scores = hyperparameter_tuning_scores
         self.best_estimators = best_estimators
         self.best_scores = best_scores
-        self.basic_scores = basic_scores
         self.k_fold = k_fold
 
     def data_balancing(self, x, y):
-        ada = RandomOverSampler()
-        x_train, y_train = ada.fit_resample(x, y)
+        oversampl = RandomOverSampler(sampling_strategy="minority")
+        x_train, y_train = oversampl.fit_resample(x, y)
 
         return x_train, y_train
 
-    def tune_hyperparams(self, estimator_name, estimator, estimator_params, base_score, train_data, train_labels, k_fold):
+    def tune_hyperparams(self, estimator_name, estimator, estimator_params, train_data, train_labels, k_fold):
         # DATA PREPROCESSING
 
         pipe = Pipeline([
-            ("ada", RandomOverSampler()),
+            ("oversampl", RandomOverSampler(sampling_strategy="minority")),
             #("pca", PCA()),
             #('LDA', LinearDiscriminantAnalysis()),
             #('SVD', TruncatedSVD()),
             (estimator_name, estimator)])
         best_model_estimator = pipe
 
-        best_model_score = base_score
+        best_model_score = 0
         sum_scores = 0
 
         for train_index, test_index in k_fold.split(train_data):
@@ -126,8 +125,7 @@ class ClassifiersParameters:
 
         mean_score, best_model_score, best_model_estimator = self.tune_hyperparams("gaussian",
                                                                               models["GaussianNB"],
-                                                                              params,
-                                                                              self.basic_scores[0], train_data,
+                                                                              params, train_data,
                                                                               train_labels, self.k_fold)
 
         self.hyperparameter_tuning_scores = np.append(self.hyperparameter_tuning_scores, mean_score)
@@ -151,7 +149,7 @@ class ClassifiersParameters:
         mean_score, best_model_score, best_model_estimator = self.tune_hyperparams("knn",
                                                                               models["KNeighborsClassifier"],
                                                                               params,
-                                                                              self.basic_scores[1], train_data,
+                                                                              train_data,
                                                                               train_labels, self.k_fold)
 
         self.hyperparameter_tuning_scores = np.append(self.hyperparameter_tuning_scores, mean_score)
@@ -176,7 +174,7 @@ class ClassifiersParameters:
         mean_score, best_model_score, best_model_estimator = self.tune_hyperparams("svm",
                                                                               models["SVM"],
                                                                               params,
-                                                                              self.basic_scores[2],
+
                                                                               train_data, train_labels, self.k_fold)
 
         self.hyperparameter_tuning_scores = np.append(self.hyperparameter_tuning_scores, mean_score)
@@ -225,7 +223,7 @@ class ClassifiersParameters:
         mean_score, best_model_score, best_model_estimator = self.tune_hyperparams("dt",
                                                                               models["DecisionTreeClassifier"],
                                                                               params,
-                                                                              self.basic_scores[3], train_data,
+                                                                               train_data,
                                                                               train_labels, self.k_fold)
 
         self.hyperparameter_tuning_scores = np.append(self.hyperparameter_tuning_scores, mean_score)
@@ -253,7 +251,7 @@ class ClassifiersParameters:
         mean_score, best_model_score, best_model_estimator = self.tune_hyperparams("lr",
                                                                               models["LogisticRegression"],
                                                                               params,
-                                                                              self.basic_scores[4], train_data,
+                                                                              train_data,
                                                                               train_labels, self.k_fold)
 
         self.hyperparameter_tuning_scores = np.append(self.hyperparameter_tuning_scores, mean_score)
@@ -283,7 +281,7 @@ class ClassifiersParameters:
         mean_score, best_model_score, best_model_estimator = self.tune_hyperparams("rf",
                                                                               models["RandomForest"],
                                                                               params,
-                                                                              self.basic_scores[5], train_data,
+                                                                              train_data,
                                                                               train_labels, self.k_fold)
 
         self.hyperparameter_tuning_scores = np.append(self.hyperparameter_tuning_scores, mean_score)
@@ -311,7 +309,7 @@ class ClassifiersParameters:
         mean_score, best_model_score, best_model_estimator = self.tune_hyperparams("gbr",
                                                                                    models["GradientBoost"],
                                                                                    params,
-                                                                                   self.basic_scores[6], train_data,
+                                                                                   train_data,
                                                                                    train_labels, self.k_fold)
 
         self.hyperparameter_tuning_scores = np.append(self.hyperparameter_tuning_scores, mean_score)
@@ -345,7 +343,7 @@ class ClassifiersParameters:
         mean_score, best_model_score, best_model_estimator = self.tune_hyperparams("xgb",
                                                                                    models["XGBClassifier"],
                                                                                    params,
-                                                                                   self.basic_scores[7], train_data,
+                                                                                   train_data,
                                                                                    train_labels, self.k_fold)
 
         self.hyperparameter_tuning_scores = np.append(self.hyperparameter_tuning_scores, mean_score)

@@ -271,3 +271,337 @@ Estimator,Score,Preprocess
 "[RandomOverSampler()
  RandomForestClassifier(max_depth=3, max_features=3, min_samples_leaf=3,
                         min_samples_split=8, n_estimators=20, random_state=42)]",0.599047619047619, outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers outliers
+"[RandomOverSampler()
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=3, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=1, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                             ]",0.6934415584415584,
+"[RandomOverSampler()
+ LogisticRegression(C=1, max_iter=1000, random_state=42)]",0.6362698412698412,
+"[RandomOverSampler()
+ DecisionTreeClassifier(criterion='entropy', min_samples_leaf=4, random_state=42)]",0.7375757575757576,
+"[RandomOverSampler()
+ DecisionTreeClassifier(criterion='entropy', min_samples_leaf=2,
+                        min_samples_split=4, random_state=42)   ]",0.6516666666666666,
+"[SMOTE(k_neighbors=3)
+ LogisticRegression(C=1, max_iter=1000, random_state=42)]",0.6129365079365079,
+[RandomOverSampler() GaussianNB()],0.5515873015873016, outliers
+"[RandomOverSampler()
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=6, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=1, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                             ]",0.5661111111111111, outliers
+"[RandomOverSampler()
+ LogisticRegression(C=5, max_iter=1000, random_state=42)]",0.5433333333333333, outliers
+"[SMOTE(k_neighbors=3) SVC(C=3, kernel='sigmoid', random_state=42)]",0.5133333333333333, outliers
+"[RandomOverSampler()
+ LogisticRegression(C=1, max_iter=1000, random_state=42)]",0.6362698412698412,
+"[RandomOverSampler()
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=3, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=1, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                             ]",0.6516666666666666,
+"[RandomOverSampler()
+ GradientBoostingClassifier(max_features=3, max_leaf_nodes=3,
+                            min_samples_split=8, min_weight_fraction_leaf=0.25)]",0.6464646464646464,
+"[RandomOverSampler()
+ LogisticRegression(C=1, max_iter=1000, penalty='none', random_state=42)]",0.5459523809523809, outliers
+"[RandomOverSampler()
+ RandomForestClassifier(max_features=1, min_samples_leaf=3, min_samples_split=8,
+                        n_estimators=20, random_state=42)                       ]",0.6176984126984127, outliers
+"[RandomOverSampler()
+ RandomForestClassifier(max_depth=3, max_features=3, min_samples_leaf=3,
+                        min_samples_split=8, n_estimators=20, random_state=42)]",0.6238888888888889,
+"[RandomOverSampler()
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=3, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=1, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                             ]",0.6325757575757576,
+"[RandomOverSampler(sampling_strategy='minority')
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=3, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=2, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                             ]",0.7097979797979799,
+"[RandomOverSampler(sampling_strategy='minority')
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=3, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=1, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                             ]",0.7293650793650792, outliers
+"[SMOTE(k_neighbors=3, sampling_strategy='minority')
+ KNeighborsClassifier(n_neighbors=2, weights='distance')]",0.6032900432900433, outliers
+"[SMOTE(k_neighbors=3, sampling_strategy='not majority')
+ KNeighborsClassifier(n_neighbors=2, weights='distance')]",0.5917460317460318, outliers
+"[SVMSMOTE(k_neighbors=3, sampling_strategy='minority')
+ KNeighborsClassifier(n_neighbors=2, weights='distance')]",0.5497186147186147, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=3, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=1, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                             ]",0.6710317460317461, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=3, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=1, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                             ]",0.7583333333333332, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ KNeighborsClassifier(n_neighbors=4, weights='distance')]",0.60995670995671, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=3, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=1, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                             ]",0.599047619047619, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ KNeighborsClassifier(n_neighbors=2, weights='distance')]",0.55995670995671, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=6, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=2, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                             ]",0.6607142857142856, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ KNeighborsClassifier(n_neighbors=2, weights='distance')]",0.55995670995671, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ DecisionTreeClassifier(criterion='entropy', max_depth=4, min_samples_leaf=2,
+                        min_samples_split=6, random_state=42)                ]",0.5432539682539682, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ LogisticRegression(C=1, max_iter=1000, random_state=42)]",0.5465079365079365, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ KNeighborsClassifier(n_neighbors=4, weights='distance')]",0.55995670995671, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ GradientBoostingClassifier(max_leaf_nodes=10, min_samples_split=8,
+                            min_weight_fraction_leaf=0)            ]",0.6621428571428571, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ LogisticRegression(C=1, max_iter=1000, random_state=42)]",0.5883333333333333, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=3, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=2, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                             ]",0.6138095238095238, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ GradientBoostingClassifier(max_leaf_nodes=3, min_samples_split=8,
+                            min_weight_fraction_leaf=0.25)        ]",0.6926984126984127, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ DecisionTreeClassifier(min_samples_leaf=8, random_state=42)]",0.6202380952380953, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=3, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=1, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                             ]",0.6764213564213565,
+"[RandomOverSampler(sampling_strategy='minority')
+ DecisionTreeClassifier(min_samples_leaf=2, random_state=42)]",0.5875757575757576,
+"[RandomOverSampler(sampling_strategy='minority')
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=3, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=1, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                             ]",0.6166666666666666, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=3, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=1, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                             ]",0.5415079365079365, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=6, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=2, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                             ]",0.6638888888888888, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=6, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=2, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                             ]",0.5952380952380952, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=10, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=1, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                              ]",0.5833333333333333, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ SVC(C=4, kernel='sigmoid', random_state=42)]",0.5711904761904761, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ GradientBoostingClassifier(max_leaf_nodes=3, min_samples_split=8,
+                            min_weight_fraction_leaf=0.25)        ]",0.5473015873015873, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ LogisticRegression(C=3, max_iter=1000, random_state=42)]",0.5883333333333333, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=10, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=2, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                              ]",0.68495670995671, outliers
+[RandomOverSampler(sampling_strategy='minority') GaussianNB()],0.5711904761904761, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=3, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=2, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                             ]",0.6399567099567098, outliers
+"[RandomOverSampler()
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=3, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=1, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                             ]",0.7238095238095237, outliers
+"[RandomOverSampler()
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=3, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=1, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                             ]",0.5845238095238094, outliers
+"[RandomOverSampler()
+ DecisionTreeClassifier(max_depth=4, min_samples_leaf=4, min_samples_split=6,
+                        random_state=42, splitter='random')                  ]",0.674047619047619, outliers
+"[RandomOverSampler()
+ GradientBoostingClassifier(max_leaf_nodes=3, min_samples_split=8,
+                            min_weight_fraction_leaf=0)           ]",0.6011904761904762, outliers
+"[RandomOverSampler(sampling_strategy='minority')
+ DecisionTreeClassifier(min_samples_leaf=2, random_state=42)]",0.7097979797979799,
+"[RandomOverSampler(sampling_strategy='minority')
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=3, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=1, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                             ]",0.6916666666666667,
+"[RandomOverSampler(sampling_strategy='minority')
+ XGBClassifier(base_score=0.5, booster='gbtree', callbacks=None,
+               colsample_bylevel=1, colsample_bynode=1, colsample_bytree=1,
+               early_stopping_rounds=None, enable_categorical=False, eta=0.8,
+               eval_metric=None, gamma=2, gpu_id=-1, grow_policy='depthwise',
+               importance_type=None, interaction_constraints='',
+               learning_rate=0.800000012, max_bin=256, max_cat_to_onehot=4,
+               max_delta_step=0, max_depth=3, max_leaves=0, min_child_weight=1,
+               missing=nan, monotone_constraints='()', n_estimators=100,
+               n_jobs=0, num_parallel_tree=1, predictor='auto', random_state=0,
+               reg_alpha=0.5, ...)                                             ]",0.7034848484848485,
+"[RandomOverSampler(sampling_strategy='minority')
+ DecisionTreeClassifier(max_depth=8, min_samples_leaf=2, min_samples_split=6,
+                        random_state=42)                                     ]",0.8088455988455989,
+"[RandomOverSampler(sampling_strategy='minority')
+ LogisticRegression(C=1, max_iter=1000, random_state=42)]",0.6596031746031745,
+"[RandomOverSampler(sampling_strategy='minority')
+ DecisionTreeClassifier(min_samples_leaf=2, min_samples_split=10,
+                        random_state=42)                         ]",0.6909090909090909,
