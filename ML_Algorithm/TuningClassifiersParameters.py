@@ -27,16 +27,23 @@ from sklearn.metrics import f1_score, accuracy_score, make_scorer
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import export_graphviz
+from xgboost.sklearn import XGBRegressor
+from sklearn.ensemble import ExtraTreesClassifier
 
 from sklearn.metrics import f1_score, accuracy_score
 from sklearn.model_selection import KFold
 
-from sklearn.pipeline import Pipeline
-from sklearn.pipeline import make_pipeline
+# from sklearn.pipeline import Pipeline
+# from sklearn.pipeline import make_pipeline
+from imblearn.pipeline import make_pipeline
+from imblearn.pipeline import Pipeline
+from imblearn.over_sampling import ADASYN, SMOTE, RandomOverSampler, SVMSMOTE
+
 
 import matplotlib.pyplot as plt
 from subprocess import call
 import os
+import ML_instance_1 as ml
 
 class ClassifiersParameters:
     hyperparameter_tuning_scores = None
@@ -53,11 +60,17 @@ class ClassifiersParameters:
         self.basic_scores = basic_scores
         self.k_fold = k_fold
 
+    def data_balancing(self, x, y):
+        ada = RandomOverSampler()
+        x_train, y_train = ada.fit_resample(x, y)
+
+        return x_train, y_train
 
     def tune_hyperparams(self, estimator_name, estimator, estimator_params, base_score, train_data, train_labels, k_fold):
         # DATA PREPROCESSING
 
         pipe = Pipeline([
+            ("ada", RandomOverSampler()),
             #("pca", PCA()),
             #('LDA', LinearDiscriminantAnalysis()),
             #('SVD', TruncatedSVD()),
@@ -72,8 +85,7 @@ class ClassifiersParameters:
             Xtrain, Xtest = train_data[train_index], train_data[test_index]
             Ytrain, Ytest = train_labels[train_index], train_labels[test_index]
 
-
-
+            Xtrain, Ytrain = self.data_balancing(Xtrain, Ytrain)
             search = GridSearchCV(pipe, estimator_params, cv=5, return_train_score=True, n_jobs=-1, verbose=1,
                                   scoring="f1_macro")
 
@@ -199,8 +211,8 @@ class ClassifiersParameters:
                 "dt__max_depth": [None, 2, 3, 4, 6, 8],
                 "dt__criterion": ["gini", "entropy"],
                 "dt__splitter": ["best", "random"],
-                "dt__min_samples_leaf": np.arange(start=1, stop=20, step=2),
-                "dt__min_samples_split": np.arange(start=1, stop=20, step=2),
+                "dt__min_samples_leaf": np.arange(start=2, stop=20, step=2),
+                "dt__min_samples_split": np.arange(start=2, stop=20, step=2),
                 # "dt__min_weight_fraction_leaf": np.arange(start=0.0, stop=5, step=1),
                 # "dt__max_features": ["auto", "sqrt", "log2"],
                 # "dt__max_leaf_nodes": np.arange(start=1, stop=20, step=1),
@@ -232,7 +244,7 @@ class ClassifiersParameters:
             {
                 # "pca__n_components": np.linspace(0.0, 0.99, 5),
                 "lr__C": np.arange(start=1, stop=10, step=1),
-                "lr__penalty": ["l1", "l2", "none"],
+                "lr__penalty": ["l2", "none"],
                 "lr__random_state": [42],
                 "lr__max_iter": [1000]
             }
@@ -281,3 +293,71 @@ class ClassifiersParameters:
         print("best_estimators", self.best_estimators)
         print("ms", self.hyperparameter_tuning_scores)
         print("bs", self.best_scores)
+
+    def perform_GBR_model_tuning(self, models, train_data, train_labels):
+
+        params = [
+            {
+                # "pca__n_components": np.linspace(0.0, 0.99, 5),
+                "gbr__max_features": [3, None],
+                # "gbr__max_depth": [3, 8, None],
+                "gbr__max_leaf_nodes": [2, 3, 10],
+                # "gbr__min_samples_leaf": [3, 4, 5],
+                "gbr__min_samples_split": [8, 10],
+                "gbr__min_weight_fraction_leaf": [0, 0.25, 0.5]
+            }
+        ]
+
+        mean_score, best_model_score, best_model_estimator = self.tune_hyperparams("gbr",
+                                                                                   models["GradientBoost"],
+                                                                                   params,
+                                                                                   self.basic_scores[6], train_data,
+                                                                                   train_labels, self.k_fold)
+
+        self.hyperparameter_tuning_scores = np.append(self.hyperparameter_tuning_scores, mean_score)
+        print(self.best_estimators)
+        est = best_model_estimator
+        self.best_estimators = np.append(self.best_estimators, est)
+        # Pipeline(steps=[('gbr',GradientBoostingRegressor(max_features=3, max_leaf_nodes=3, min_samples_split=10, min_weight_fraction_leaf=0.5))]))
+        print(self.best_estimators)
+
+        self.best_scores = np.append(self.best_scores, best_model_score)
+
+        print("best_estimators", self.best_estimators)
+        print("ms", self.hyperparameter_tuning_scores)
+        print("bs", self.best_scores)
+
+    def perform_XGB_model_tuning(self, models, train_data, train_labels):
+        # XGB
+
+        params = [
+            {
+                # "pca__n_components": np.linspace(0.0, 0.99, 5),
+                #"xgb__min_child_weight": [0, 1, 2, 10],
+                "xgb__max_depth": [3, 6, 10],
+                # "xgb__sampling_method": ["uniform", "subsample", "gradient_based"],
+                # "xgb__tree_method": ["auto", "exact", "approx", "hist", "gpu_hist"],
+                #"xgb__max_bin": [256, 512],
+                "xgb__num_parallel_tree": [1, 2, 3]
+            }
+        ]
+
+        mean_score, best_model_score, best_model_estimator = self.tune_hyperparams("xgb",
+                                                                                   models["XGBClassifier"],
+                                                                                   params,
+                                                                                   self.basic_scores[7], train_data,
+                                                                                   train_labels, self.k_fold)
+
+        self.hyperparameter_tuning_scores = np.append(self.hyperparameter_tuning_scores, mean_score)
+        self.best_estimators = np.append(self.best_estimators, best_model_estimator)
+        self.best_scores = np.append(self.best_scores, best_model_score)
+
+        print("best_estimators", self.best_estimators)
+        print("ms", self.hyperparameter_tuning_scores)
+        print("bs", self.best_scores)
+
+
+
+
+
+

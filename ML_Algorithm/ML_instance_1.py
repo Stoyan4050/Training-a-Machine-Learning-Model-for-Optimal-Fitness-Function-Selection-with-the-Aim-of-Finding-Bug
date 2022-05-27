@@ -31,12 +31,19 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
 from sklearn.tree import export_graphviz
 from sklearn.feature_selection import chi2
+from xgboost.sklearn import XGBClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 
 from sklearn.metrics import f1_score, accuracy_score
 from sklearn.model_selection import KFold
+from sklearn.ensemble import IsolationForest
 
-from sklearn.pipeline import Pipeline
-from sklearn.pipeline import make_pipeline
+# from sklearn.pipeline import Pipeline
+# from sklearn.pipeline import make_pipeline
+
+from imblearn.pipeline import Pipeline
+from imblearn.pipeline import make_pipeline
+from imblearn.over_sampling import ADASYN, SMOTE, RandomOverSampler, SVMSMOTE
 
 import matplotlib.pyplot as plt
 from subprocess import call
@@ -85,7 +92,7 @@ def data_preprocessing(train_data, train_labels):
     # model = SelectPercentile(chi2)
     # train_data_c = model.fit_transform(train_data, train_labels)
 
-    lsvc = LinearSVC(penalty="l1", dual=False).fit(train_data, train_labels)
+    lsvc = LinearSVC(C=0.01, penalty="l1", dual=False).fit(train_data, train_labels)
     model = SelectFromModel(lsvc, prefit=True)
     train_data_c = model.transform(train_data)
 
@@ -131,6 +138,29 @@ def extract_features(df1, train_data):
 
     return final_features
 
+def checking_for_outliers(x, y):
+    global preprocess
+    isf = IsolationForest(n_jobs=-1, random_state=1)
+    isf.fit(x, y)
+    out = isf.predict(x)
+
+    y_new = []
+    x_new = []
+    for i in range(len(out)):
+        if out[i] != -1:
+            y_new.append(y[i])
+            x_new.append(x[i])
+
+    preprocess = preprocess + " outliers"
+    return np.array(x_new), np.array(y_new)
+
+
+def data_balancing(x, y):
+    ada = RandomOverSampler()
+    x_train, y_train = ada.fit_resample(x, y)
+
+    return x_train, y_train
+
 def convert_data(data):
     list = []
     for l in data:
@@ -146,7 +176,9 @@ def all_models():
         "SVM": SVC(C=10, kernel="poly", random_state=42),
         "DecisionTreeClassifier": DecisionTreeClassifier(max_depth=None, min_samples_leaf=2, random_state=42),
         "LogisticRegression": LogisticRegression(C=10, random_state=42, penalty="none", max_iter=10000),
-        "RandomForest": RandomForestClassifier(random_state=42, max_depth=None, min_samples_leaf=2)
+        "RandomForest": RandomForestClassifier(random_state=42, max_depth=None, min_samples_leaf=2),
+        "GradientBoost": GradientBoostingClassifier(),
+        "XGBClassifier": XGBClassifier(max_depth=2, gamma=2, eta=0.8, reg_alpha=0.5, reg_lambda=0.5)
     }
     #print(models["RandomForest"].get_params().keys())
 
@@ -162,6 +194,12 @@ def all_models():
     assert "RandomForest" in models and isinstance(models["RandomForest"],
                                                          RandomForestClassifier), "There is no RandomForestClassifier in models"
 
+    assert "GradientBoost" in models and isinstance(models["GradientBoost"],
+                                                         GradientBoostingClassifier), "There is no GradientBoost in models"
+
+    assert "XGBClassifier" in models and isinstance(models["XGBClassifier"],
+                                                         XGBClassifier), "There is no XGBClassifier in models"
+
     train_data = np.genfromtxt("ReadyForML/metrics_twbranch_60_output_60.csv", delimiter=',')[1:, 2:]
     train_labels = np.array(
         convert_data(np.genfromtxt("ReadyForML/results_difference_twbranch_60_output_60.csv", delimiter=',')[1:, 1:])).astype(int)
@@ -170,23 +208,22 @@ def all_models():
     train_data = np.nan_to_num(train_data, nan=0)
     # train_labels = np.array(
     #     convert_data(np.genfromtxt("ReadyForML/results_difference_twdefault_300_output_300.csv", delimiter=',')[1:, 1:])).astype(int)
-
+    train_labels[train_labels < 0] = 0
     np.set_printoptions(threshold=np.inf)
-
     k_fold = KFold(n_splits=5)
-
-    basic_scores = basic_parameters_algorithm(models, train_data, train_labels, k_fold)
-
 
     train_data, features = data_preprocessing(train_data, train_labels)
 
+    #train_data, train_labels = checking_for_outliers(train_data, train_labels)
+
+
     print("FEAT",features)
 
+    basic_scores = basic_parameters_algorithm(models, train_data, train_labels, k_fold)
 
     tuning = cp.ClassifiersParameters(hyperparameter_tuning_scores=np.empty(0),
                                       best_estimators=np.empty(0), best_scores=np.empty(0),
                                       basic_scores=basic_scores, k_fold=k_fold)
-
 
 
     # Hyper Parameter Tuning
@@ -196,6 +233,8 @@ def all_models():
     tuning.perform_DT_model_tuning(models, train_data, train_labels)
     tuning.perform_LR_model_tuning(models, train_data, train_labels)
     tuning.perform_RF_model_tuning(models, train_data, train_labels)
+    tuning.perform_GBR_model_tuning(models, train_data, train_labels)
+    tuning.perform_XGB_model_tuning(models, train_data, train_labels)
 
     # Get results
     get_results_from_tuning(train_data, train_labels, tuning, features)
@@ -215,7 +254,9 @@ def basic_parameters_algorithm(models, train_data, train_labels, k_fold):
             Xtrain, Xtest = train_data[train_index], train_data[test_index]
             Ytrain, Ytest = train_labels[train_index], train_labels[test_index]
 
-            pipe = make_pipeline(PCA(), model)
+            Xtrain, Ytrain = data_balancing(Xtrain, Ytrain)
+            #Xtrain, Ytrain = checking_for_outliers(Xtrain, Ytrain)
+            pipe = make_pipeline(model)
             pipe.fit(Xtrain, Ytrain)
             prediction = pipe.predict(Xtest)
 
@@ -240,7 +281,7 @@ def get_results_from_tuning(train_data, train_labels, tuning, features):
     global preprocess
 
     # Change This
-    best_estimators = tuning.best_estimators.reshape(int(tuning.best_estimators.size / 1), 1)
+    best_estimators = tuning.best_estimators.reshape(int(tuning.best_estimators.size / 2), 2)
     final_scores = np.empty(0)
 
     # print(best_estimators)
@@ -249,9 +290,10 @@ def get_results_from_tuning(train_data, train_labels, tuning, features):
         for train_index, test_index in tuning.k_fold.split(train_data):
             Xtrain, Xtest = train_data[train_index], train_data[test_index]
             Ytrain, Ytest = train_labels[train_index], train_labels[test_index]
-
+            Xtrain, Ytrain = data_balancing(Xtrain, Ytrain)
+            #checking_for_outliers(Xtrain, Ytrain)
             # Change this
-            pipe = make_pipeline(model[0])
+            pipe = make_pipeline(model[0], model[1])
             pipe.fit(Xtrain, Ytrain)
             prediction = pipe.predict(Xtest)
 
@@ -266,7 +308,7 @@ def get_results_from_tuning(train_data, train_labels, tuning, features):
         print("F1 score:", score, "\n")
 
     # print(basic_scores)
-    createDoublePlot(tuning.hyperparameter_tuning_scores, tuning.basic_scores, ["NaiveBayes", "KNN", "SVM", "DecTree", "LogRegr", "RandomForest"],
+    createDoublePlot(tuning.hyperparameter_tuning_scores, tuning.basic_scores, ["NaiveBayes", "KNN", "SVM", "DecTree", "LogRegr", "RandomForest", "GradientBoost", "XGB"],
                      "Best estimators", "Estimator with basic parameters")
 
     # print(best_estimators)
@@ -279,8 +321,8 @@ def get_results_from_tuning(train_data, train_labels, tuning, features):
     save_results(best_model, np.max(tuning.hyperparameter_tuning_scores), preprocess)
 
     print("Loading_Model")
-    visualize_tree(best_estimators[3][0], features)
-    pipe = make_pipeline(best_model[0])
+    # visualize_tree(best_estimators[3][0], features)
+    pipe = make_pipeline(best_model[0], best_model[1])
     pipe.fit(train_data, train_labels)
 
 def save_results(estimator, score, preprocess):
