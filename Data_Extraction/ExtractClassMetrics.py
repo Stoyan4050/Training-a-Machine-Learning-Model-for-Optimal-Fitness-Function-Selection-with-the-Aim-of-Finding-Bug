@@ -45,7 +45,7 @@ def combine_output(out):
 
 def write_file():
     global metrics
-    with open('metrics.txt', 'w') as f:
+    with open('Others/metrics.txt', 'w') as f:
         f.write(metrics)
 
     f.close()
@@ -54,7 +54,7 @@ def write_file():
 
 
 def process_raw_metrics_from_cmd():
-    file = open('metrics.txt', 'r')
+    file = open('Others/metrics.txt', 'r')
     lines = file.readlines()
 
     processed = ""
@@ -62,7 +62,7 @@ def process_raw_metrics_from_cmd():
         if not line.startswith(' ~') and line.strip() != "":
             processed = processed + line
 
-    with open('metrics.txt', 'w') as f:
+    with open('Others/metrics.txt', 'w') as f:
         f.write(processed)
 
     f.close()
