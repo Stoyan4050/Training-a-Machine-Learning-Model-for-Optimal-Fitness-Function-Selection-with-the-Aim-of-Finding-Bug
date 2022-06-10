@@ -34,26 +34,26 @@ def feature_selection(train_data, train_labels):
                       #(LinearSVC(C=0.01, penalty="l1", dual=False), False), #good
                       #(LinearSVC(C=0.02, penalty="l1", dual=False), False),
                       #(LinearSVC(C=0.015, penalty="l1", dual=False), False), #good
-                      #(LinearSVC(C=0.008, penalty="l1", dual=False), False), - not good
+                      #(LinearSVC(C=0.008, penalty="l1", dual=False), False), #- not good
                       # (SelectKBest(f_classif, k=3), True),
                       #(SelectKBest(f_classif, k=4), True), - not good
-                      #(SelectKBest(f_classif, k=5), True), -not good
-                      (SelectKBest(f_classif, k=6), True),
-                      #(SelectKBest(f_classif, k=8), True), #good
-                      #(SelectPercentile(chi2), True),
+                      #(SelectKBest(f_classif, k=5), True), #-not good
+                      # (SelectKBest(f_classif, k=6), True),
+                      # (SelectKBest(f_classif, k=8), True), #good
+                      # (SelectKBest(f_classif, k=10), True),  # good
+                      # (SelectPercentile(chi2), True),
                       #(LogisticRegression(C=1, penalty="l1", solver="liblinear"), False),
                       # (LogisticRegression(C=2, penalty="l1"), False),
-                      (LogisticRegression(C=3, penalty="l1", solver="liblinear"), False),
-                      # (RandomForestClassifier(n_estimators=2), False),
-                      # (RandomForestClassifier(max_depth=2, max_features=5), False), # not good
-                      (RandomForestClassifier(max_depth=3, max_features=8), False),
-                      # (DecisionTreeClassifier(max_depth=2, max_features=5), False),
-                      (DecisionTreeClassifier(max_depth=3, max_features=8), False),
-                      # (KNeighborsClassifier(n_neighbors=3, weights="distance"), False),
-                      (KNeighborsClassifier(), False),
-                      (GaussianNB(), False),
-                      # (XGBClassifier(max_depth=2), False),
-                      (XGBClassifier(max_depth=5), False)]
+                      #(LogisticRegression(C=3, penalty="l1", solver="liblinear"), False),
+                      #(RandomForestClassifier(n_estimators=2), False),
+                      #(RandomForestClassifier(max_depth=2, max_features=5), False), # not good
+                      #(RandomForestClassifier(max_depth=3, max_features=8), False),
+                      #(DecisionTreeClassifier(max_depth=4, max_features=10), False),
+                      #(DecisionTreeClassifier(max_depth=3, max_features=8), False),
+                      #(DecisionTreeClassifier(), False),
+                      (XGBClassifier(max_depth=2), False),
+                      (XGBClassifier(max_depth=5), False)
+    ]
 
     for config, cond in configurations:
         print("Feature selection: ", config)
@@ -80,11 +80,12 @@ def feature_selection(train_data, train_labels):
 
 
 def outliers_removal(train_data, train_labels, model_features, features):
-    models = [None,
-              #IsolationForest(),
+    models = [
+              None,
+              IsolationForest(),
               IsolationForest(max_features=5, n_estimators=10),
-              IsolationForest(n_estimators=8)
-              #IsolationForest(n_estimators=10)
+              IsolationForest(n_estimators=8),
+              IsolationForest(n_estimators=20)
               ]
 
     list_pipes = []

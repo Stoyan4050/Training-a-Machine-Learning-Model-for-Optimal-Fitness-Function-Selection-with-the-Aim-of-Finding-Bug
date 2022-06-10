@@ -19,6 +19,7 @@ if __name__ == '__main__':
     # 0 for branch, out out < 0.5
     # 1 fot out, branch out > 0.5
 
-    st.prepare_data_for_st(criteria1="default_300", criteria2="output_300")
+    #st.prepare_data_for_st(criteria1="default_300", criteria2="output_300")
+    ad.filter_data_metrics_eff_test(criteria1="mut_branch_60", criteria2="mut_output_60")
 
     #st.prepare_data_for_st(criteria1="default_60", criteria2="output_60")

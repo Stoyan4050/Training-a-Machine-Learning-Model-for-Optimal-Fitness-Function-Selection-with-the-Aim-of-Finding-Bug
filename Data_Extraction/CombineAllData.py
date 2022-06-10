@@ -14,6 +14,28 @@ def create_csv_from_class_metrics():
     df = pd.DataFrame(data=combined_metrics_data)
     df.to_csv('all_metrics.csv')
 
+def filter_data_metrics_eff_test(criteria1, criteria2):
+    df = pd.read_csv("res_eff_label_" + criteria1 + "_" + criteria2 + ".csv")
+    df_metrics = pd.read_csv("class_metrics.csv")
+    df_res_metrics = pd.DataFrame([])
+    df_res_data = pd.DataFrame([])
+
+
+    for index, row in df.iterrows():
+        if row["magnitude"] != "negligible" and row["magnitude"] != "small":
+            curr_met = df_metrics.loc[df_metrics["class"] == row["class"]]
+            df_res_metrics = pd.concat([df_res_metrics, curr_met], ignore_index=True)
+            print(row["class"])
+            print(row["label"])
+            row_ref = pd.DataFrame(data=[(row["class"], row["label"])], columns=["class", "label"])
+            df_res_data = pd.concat([df_res_data, row_ref], ignore_index=True)
+
+    df_res_met1 = df_res_metrics.drop(df_metrics.columns[[0]], axis=1)
+    df_res_met1.to_csv('metrics_chosen_classes_eff_' + criteria1 + "_" + criteria2 + '.csv', index=False)
+
+    #df_res_data1 = df_res_data.drop(df.columns[[0]], axis=1)
+    df_res_data.to_csv('eff_no_magn_' + criteria1 + "_" + criteria2 + '.csv', index=False)
+
 
 def get_appropriate_classes(criteria):
     df = pd.read_csv("combined_results_" + criteria + ".csv")

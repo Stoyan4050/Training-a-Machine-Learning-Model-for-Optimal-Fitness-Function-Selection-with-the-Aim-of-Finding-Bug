@@ -1,0 +1,5 @@
+0 lcom* q
+1 privateFieldsQty q
+2 tryCatchQty q
+3 mathOperationsQty q
+4 lambdasQty q

@@ -19,8 +19,11 @@ from sklearn.metrics import f1_score, accuracy_score, make_scorer
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
 from sklearn.tree import export_graphviz
+from xgboost import to_graphviz
+
 from sklearn.feature_selection import chi2
 from xgboost.sklearn import XGBClassifier
+from xgboost import plot_tree
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble import AdaBoostClassifier
 
@@ -139,7 +142,7 @@ def all_models(train_data, train_labels, feature_model, features, outlier):
                                                       best_estimators=np.empty(0), best_scores=np.empty(0),
                                                       oversampling_name=balancer, oversampling_model=balance_model,
                                                       k_fold=k_fold)
-                    parameter_tuning(tuning, models, train_data, train_labels, pipe)
+                    parameter_tuning(tuning, models, train_data, train_labels, pipe, features)
 
         if balancer == "smote":
             for strat in sampl_strat:
@@ -156,14 +159,14 @@ def all_models(train_data, train_labels, feature_model, features, outlier):
                                                       k_fold=k_fold)
 
                     if check_smote(balance_model, train_data, train_labels):
-                        parameter_tuning(tuning, models, train_data, train_labels, pipe)
+                        parameter_tuning(tuning, models, train_data, train_labels, pipe, features)
 
         # Hyper Parameter Tuning
 
 
     # Get results
 
-def parameter_tuning(tuning, models, train_data, train_labels, pipe):
+def parameter_tuning(tuning, models, train_data, train_labels, pipe, features):
     tuning.perform_Gaussian_model_tuning(models, train_data, train_labels)
     tuning.perform_SVC_model_tuning(models, train_data, train_labels)
     tuning.perform_DT_model_tuning(models, train_data, train_labels)
@@ -214,9 +217,10 @@ def get_results_from_tuning(train_data, train_labels, tuning, features):
 
     #createSinglePlot(tuning.hyperparameter_tuning_scores, ["NaiveBayes", "SVM", "DecTree", "LogRegr", "RandomForest", "GradientBoost", "XGB", "AdaBoost"])
     best_model = best_estimators[np.argmax(tuning.hyperparameter_tuning_scores)]
-    print(best_model)
+    #print(best_model)
 
-    print(tuning.hyperparameter_tuning_scores)
+    #plot_xgb(best_model[1], features, np.max(tuning.hyperparameter_tuning_scores))
+    #print(tuning.hyperparameter_tuning_scores)
     save_results(best_model, np.max(tuning.hyperparameter_tuning_scores), "no_data")
 
     # visualize_tree(best_estimators[3][0], features)
@@ -228,12 +232,21 @@ def get_results_from_tuning(train_data, train_labels, tuning, features):
 
 def check_smote(model, x, y):
     try:
-        print("tuk")
         x_train, y_train = model.fit_resample(x, y)
         return True
     except:
         print("tuk2")
         return False
+
+
+def plot_xgb(estimator, features, score):
+    print(features)
+
+    print(score)
+
+    plot_tree(estimator, fmap="Features_xgb.txt")
+    plt.title(str(score))
+    plt.show()
 
 def save_results(estimator, score, preprocess):
     df1 = pd.read_csv("ML_res.csv")
@@ -243,19 +256,21 @@ def save_results(estimator, score, preprocess):
 
     df_res.to_csv("ML_res.csv", index=False)
 
-def visualize_tree(estimator, features):
+def visualize_tree(estimator, features, name=""):
     os.environ["PATH"] += os.pathsep + 'D:\\PROGRAMS\\Graphviz\\bin\\'
+    print(estimator)
+    plot_tree(estimator)
     print(features)
     # Export as dot file
-    export_graphviz(estimator, out_file='Trees/tree.dot',
+    export_graphviz(estimator, out_file='Trees/tree'+name+'.dot',
 
                     #feature_names=["cbo", "cboModified", "fanin", "fanout", "wmc", "dit", "noc", "rfc", "lcom", "lcom*", "tcc", "lcc", "totalMethodsQty", "staticMethodsQty", "publicMethodsQty", "privateMethodsQty", "protectedMethodsQty", "defaultMethodsQty", "visibleMethodsQty", "abstractMethodsQty", "finalMethodsQty", "synchronizedMethodsQty", "totalFieldsQty", "staticFieldsQty", "publicFieldsQty", "privateFieldsQty", "protectedFieldsQty", "defaultFieldsQty", "finalFieldsQty", "synchronizedFieldsQty", "nosi", "loc", "returnQty", "loopQty", "comparisonsQty", "tryCatchQty", "parenthesizedExpsQty", "stringLiteralsQty", "numbersQty", "assignmentsQty", "mathOperationsQty", "variablesQty", "maxNestedBlocksQty", "anonymousClassesQty", "innerClassesQty", "lambdasQty", "uniqueWordsQty", "modifiers", "logStatementsQty"],
-                    feature_names=features,
+                    feature_names=['lcom*', 'privateFieldsQty', 'tryCatchQty', 'variablesQty', 'lambdasQty'],
                     #["WMC", "DIT", "NOC", "CBO", "RFC", "LCOM", "Ca", "Ce", "NPM", "LCOM3", "LOC", "DAM", "MOA", "MFA","CAM", "IC", "CBM", "AMC"]
-                    class_names=["Branch", "Branch + Output Diversity"],
+                    class_names=["Default", "Branch + Output Diversity"],
                     rounded=True, proportion=False,
                     precision=2, filled=True)
 
     # Convert to png using system command (requires Graphviz)
-    call(['dot', '-Tpng', 'tree.dot', '-o', 'tree.png', '-Gdpi=600'])
+    call(['dot', '-Tpng', 'Trees/tree'+ name +'.dot', '-o', 'Trees/tree'+ name +'.png', '-Gdpi=600'])
 

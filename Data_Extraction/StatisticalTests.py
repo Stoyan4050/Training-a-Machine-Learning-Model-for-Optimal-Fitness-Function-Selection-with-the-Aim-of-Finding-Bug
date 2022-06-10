@@ -201,8 +201,8 @@ def prepare_data_for_st(criteria1, criteria2, fill_till_10_test = False):
             else:
                 wilcoxon_test(data_needed_crit1, data_needed_crit2, c)
 
-    df_res_eff = pd.DataFrame(ap_classes_eff, columns=["class", "A_size", "magnitude"])
-    df_res_eff.to_csv("res_eff_" + criteria1 + "_" + criteria2 + "_0.csv", index=False)
+    #df_res_eff = pd.DataFrame(ap_classes_eff, columns=["class", "A_size", "magnitude"])
+    #df_res_eff.to_csv("res_eff_" + criteria1 + "_" + criteria2 + "_0.csv", index=False)
     ad.compute_average_data(criteria1, ap_classes)
     ad.compute_average_data(criteria2, ap_classes)
     ad.all_metrics_for_classes_with_test_results(criteria="branch60", classes_given=ap_classes, save_metrics=True)

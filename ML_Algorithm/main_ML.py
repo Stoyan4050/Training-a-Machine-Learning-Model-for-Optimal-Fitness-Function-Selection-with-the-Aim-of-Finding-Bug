@@ -1,5 +1,6 @@
 import Pipeline as pipe
 import DataPreparation as dp
+import manual_analysis_tools as mat
 metrics = ""
 
 if __name__ == '__main__':
@@ -8,6 +9,6 @@ if __name__ == '__main__':
 
     #dp.check_for_differences_in_classes("branch_180", "output_180")
 
-    dp.efficiency_test_labeling("default_300", "output_300")
-    #pipe.load_data()
+    #dp.efficiency_test_labeling("default_300", "output_300")
+    pipe.load_data()
     #mr.all_models()

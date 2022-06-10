@@ -1,0 +1,24 @@
+digraph {
+    graph [ rankdir=TB ]
+    graph [ rankdir="LR" ]
+
+    0 [ label="mathOperationsQty<-0.237965643" ]
+    0 -> 1 [label="yes, missing" color="#0000FF"]
+    0 -> 2 [label="no" color="#FF0000"]
+
+    1 [ label="leaf=0.400000036" ]
+
+    2 [ label="mathOperationsQty<2.97728634" ]
+    2 -> 3 [label="yes, missing" color="#0000FF"]
+    2 -> 4 [label="no" color="#FF0000"]
+
+    3 [ label="privateFieldsQty<0.73939395" ]
+    3 -> 5 [label="yes, missing" color="#0000FF"]
+    3 -> 6 [label="no" color="#FF0000"]
+
+    5 [ label="leaf=0.0666666701" ]
+
+    6 [ label="leaf=-0.450000018" ]
+
+    4 [ label="leaf=0.200000018" ]
+}

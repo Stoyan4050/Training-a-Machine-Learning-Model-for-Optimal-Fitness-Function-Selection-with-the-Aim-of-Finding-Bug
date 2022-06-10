@@ -52,7 +52,7 @@ class ClassifiersParameters:
             Xtrain, Ytrain = self.data_balancing(Xtrain, Ytrain)
 
             print("Data after 1st balancing", Xtrain.shape, Ytrain.shape)
-            search = GridSearchCV(pipe, estimator_params, cv=5, return_train_score=True, n_jobs=-1, verbose=2,
+            search = GridSearchCV(pipe, estimator_params, cv=5, return_train_score=True, n_jobs=-1, verbose=1,
                                   scoring="f1_macro")
 
             search.fit(Xtrain, Ytrain)
