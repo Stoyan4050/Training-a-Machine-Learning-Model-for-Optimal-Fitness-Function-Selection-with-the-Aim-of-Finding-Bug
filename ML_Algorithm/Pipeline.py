@@ -1,6 +1,8 @@
 import numpy as np
 import Preprocessing as pp
 import pandas as pd
+import sys
+
 
 class Pipeline:
     features = ""
@@ -51,10 +53,10 @@ def convert_data(data):
 
 
 def load_data():
-    train_data = np.genfromtxt("ReadyForML/AfterEffTest/Branch/metrics_chosen_classes_eff_branch_300_output_300.csv", delimiter=',')[1:, 2:]
+    train_data = np.genfromtxt("ReadyForML/AfterEffTest/Default/metrics_chosen_classes_eff_default_300_output_300.csv", delimiter=',')[1:, 2:]
     train_labels = np.array(
         convert_data(
-            np.genfromtxt("ReadyForML/AfterEffTest/Branch/eff_no_magn_branch_300_output_300.csv", delimiter=',')[1:, 1:])).astype(int)
+            np.genfromtxt("ReadyForML/AfterEffTest/Default/eff_no_magn_default_300_output_300.csv", delimiter=',')[1:, 1:])).astype(int)
 
     # train_data = np.genfromtxt("ReadyForML/metrics_twdefault_300_output_300.csv", delimiter=',')[1:, 1:]
     # train_labels = np.array(
@@ -64,12 +66,12 @@ def load_data():
 
     train_labels[train_labels < 0] = 0
 
-    print(train_data)
+    #print(train_data)
     print(train_labels)
     print("Loaded data", train_data.shape)
 
     df = pd.read_csv("Model_performance.csv")
     #df = df[0:0]
     df.to_csv('Model_performance.csv', index=False)
-
+    #sys.setrecursionlimit(1000000)
     pp.feature_selection(train_data, train_labels)

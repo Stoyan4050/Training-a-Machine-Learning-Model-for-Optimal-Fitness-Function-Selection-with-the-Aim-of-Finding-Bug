@@ -1,0 +1,21 @@
+digraph Tree {
+node [shape=box, style="filled, rounded", color="black", fontname="helvetica"] ;
+edge [fontname="helvetica"] ;
+0 [label="numbersQty <= 12.5\ngini = 0.5\nsamples = 54\nvalue = [44, 50]\nclass = Branch + Output Diversity", fillcolor="#e7f3fc"] ;
+1 [label="gini = 0.0\nsamples = 14\nvalue = [0, 26]\nclass = Branch + Output Diversity", fillcolor="#399de5"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+2 [label="cbo <= 4.5\ngini = 0.46\nsamples = 40\nvalue = [44, 24]\nclass = Branch", fillcolor="#f3c6a5"] ;
+0 -> 2 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+3 [label="uniqueWordsQty <= 75.0\ngini = 0.27\nsamples = 19\nvalue = [26, 5]\nclass = Branch", fillcolor="#ea995f"] ;
+2 -> 3 ;
+4 [label="gini = 0.0\nsamples = 6\nvalue = [9, 0]\nclass = Branch", fillcolor="#e58139"] ;
+3 -> 4 ;
+5 [label="gini = 0.35\nsamples = 13\nvalue = [17, 5]\nclass = Branch", fillcolor="#eda673"] ;
+3 -> 5 ;
+6 [label="lcom* <= 0.99\ngini = 0.5\nsamples = 21\nvalue = [18, 19]\nclass = Branch + Output Diversity", fillcolor="#f5fafe"] ;
+2 -> 6 ;
+7 [label="gini = 0.39\nsamples = 17\nvalue = [7, 19]\nclass = Branch + Output Diversity", fillcolor="#82c1ef"] ;
+6 -> 7 ;
+8 [label="gini = 0.0\nsamples = 4\nvalue = [11, 0]\nclass = Branch", fillcolor="#e58139"] ;
+6 -> 8 ;
+}

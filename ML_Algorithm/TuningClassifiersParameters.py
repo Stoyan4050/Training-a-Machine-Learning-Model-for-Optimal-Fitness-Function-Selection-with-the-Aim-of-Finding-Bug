@@ -28,6 +28,14 @@ class ClassifiersParameters:
         self.oversampling_name = oversampling_name
         self.oversampling_model = oversampling_model
 
+    def check_smote(self, x, y):
+        try:
+            x_train, y_train = self.oversampling_model.fit_resample(x, y)
+            return True
+        except:
+            print("tuk2")
+            return False
+
     def data_balancing(self, x, y):
         x_train, y_train = self.oversampling_model.fit_resample(x, y)
 
@@ -49,7 +57,10 @@ class ClassifiersParameters:
             Xtrain, Xtest = train_data[train_index], train_data[test_index]
             Ytrain, Ytest = train_labels[train_index], train_labels[test_index]
 
-            Xtrain, Ytrain = self.data_balancing(Xtrain, Ytrain)
+            if self.check_smote(Xtrain, Ytrain) is False:
+                break
+            else:
+                Xtrain, Ytrain = self.data_balancing(Xtrain, Ytrain)
 
             print("Data after 1st balancing", Xtrain.shape, Ytrain.shape)
             search = GridSearchCV(pipe, estimator_params, cv=5, return_train_score=True, n_jobs=-1, verbose=1,
@@ -155,6 +166,21 @@ class ClassifiersParameters:
 
         }
 
+
+        params = {
+
+            "dt__max_depth": [4],
+            "dt__criterion": ["entropy"],
+            "dt__splitter": ["best"],
+            "dt__min_samples_leaf": [4],
+            "dt__min_samples_split": [8],
+            # "dt__min_weight_fraction_leaf": np.arange(start=0.0, stop=5, step=1),
+            "dt__max_features": ["log2"],
+
+
+        }
+
+
         mean_score, best_model_score, best_model_estimator = self.tune_hyperparams("dt",
                                                                                    models["DecisionTreeClassifier"],
                                                                                    params,
@@ -206,6 +232,7 @@ class ClassifiersParameters:
             "rf__n_estimators": [10, 20]
         }]
 
+
         mean_score, best_model_score, best_model_estimator = self.tune_hyperparams("rf",
                                                                                    models["RandomForest"],
                                                                                    params,
@@ -231,8 +258,27 @@ class ClassifiersParameters:
             "gbr__min_weight_fraction_leaf": [0, 0.25, 0.5]
         }]
 
+
+        # mut def
+        # params = [{
+        #     "gbr__max_features": [3],
+        #     # "gbr__max_depth": [3, 8, None],
+        #     "gbr__max_leaf_nodes": [10],
+        #     # "gbr__min_samples_leaf": [3, 4, 5],
+        #     "gbr__min_samples_split": [10],
+        #     "gbr__min_weight_fraction_leaf": [0]
+        # }]
+
+        # def - 180
+        # params = [{
+        #     "gbr__max_features": [3],
+        #     "gbr__max_leaf_nodes": [3],
+        #     "gbr__min_samples_split": [8],
+        #     "gbr__min_weight_fraction_leaf": [0]
+        # }]
+
         mean_score, best_model_score, best_model_estimator = self.tune_hyperparams("gbr",
-                                                                                   models["GradientBoost"],
+                                                                                   models["GradientBoost_180"],
                                                                                    params,
                                                                                    train_data,
                                                                                    train_labels, self.k_fold)

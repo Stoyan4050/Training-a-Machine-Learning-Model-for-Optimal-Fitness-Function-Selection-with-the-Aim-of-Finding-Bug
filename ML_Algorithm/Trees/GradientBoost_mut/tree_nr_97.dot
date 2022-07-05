@@ -1,0 +1,29 @@
+digraph Tree {
+node [shape=box, style="filled, rounded", color="black", fontname="helvetica"] ;
+edge [fontname="helvetica"] ;
+0 [label="dit <= 1.5\nfriedman_mse = 0.0\nsamples = 124\nvalue = -0.0", fillcolor="#eda672"] ;
+1 [label="comparisonsQty <= 14.5\nfriedman_mse = 0.0\nsamples = 98\nvalue = 0.0", fillcolor="#eda572"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+5 [label="privateFieldsQty <= 5.5\nfriedman_mse = 0.0\nsamples = 27\nvalue = -0.0", fillcolor="#eda673"] ;
+1 -> 5 ;
+9 [label="friedman_mse = 0.0\nsamples = 22\nvalue = -1.01", fillcolor="#fffdfd"] ;
+5 -> 9 ;
+10 [label="friedman_mse = 0.0\nsamples = 5\nvalue = -1.0", fillcolor="#fffdfc"] ;
+5 -> 10 ;
+6 [label="privateFieldsQty <= 5.5\nfriedman_mse = 0.0\nsamples = 71\nvalue = 0.0", fillcolor="#eca572"] ;
+1 -> 6 ;
+7 [label="friedman_mse = 0.0\nsamples = 66\nvalue = 0.42", fillcolor="#e58139"] ;
+6 -> 7 ;
+8 [label="friedman_mse = 0.0\nsamples = 5\nvalue = -1.02", fillcolor="#ffffff"] ;
+6 -> 8 ;
+2 [label="assignmentsQty <= 32.5\nfriedman_mse = 0.0\nsamples = 26\nvalue = -0.0", fillcolor="#eda673"] ;
+0 -> 2 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+3 [label="privateFieldsQty <= 1.5\nfriedman_mse = 0.0\nsamples = 19\nvalue = -0.0", fillcolor="#eda672"] ;
+2 -> 3 ;
+11 [label="friedman_mse = 0.0\nsamples = 7\nvalue = -1.0", fillcolor="#fffdfc"] ;
+3 -> 11 ;
+12 [label="friedman_mse = 0.0\nsamples = 12\nvalue = -1.0", fillcolor="#fffdfc"] ;
+3 -> 12 ;
+4 [label="friedman_mse = 0.0\nsamples = 7\nvalue = -1.02", fillcolor="#ffffff"] ;
+2 -> 4 ;
+}

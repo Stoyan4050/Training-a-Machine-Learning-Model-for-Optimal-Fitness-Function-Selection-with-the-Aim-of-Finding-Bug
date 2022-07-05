@@ -31,28 +31,28 @@ def feature_selection(train_data, train_labels):
 
     configurations = [
         # (None, True),
-                      #(LinearSVC(C=0.01, penalty="l1", dual=False), False), #good
+                      #(LinearSVC(C=0.01, penalty="l1", dual=False), False), #good - MB
                       #(LinearSVC(C=0.02, penalty="l1", dual=False), False),
-                      #(LinearSVC(C=0.015, penalty="l1", dual=False), False), #good
+                      #(LinearSVC(C=0.015, penalty="l1", dual=False), False), #good - MB
                       #(LinearSVC(C=0.008, penalty="l1", dual=False), False), #- not good
-                      # (SelectKBest(f_classif, k=3), True),
-                      #(SelectKBest(f_classif, k=4), True), - not good
+                      #(SelectKBest(f_classif, k=3), True),
+                      #(SelectKBest(f_classif, k=4), True), #- not good
                       #(SelectKBest(f_classif, k=5), True), #-not good
-                      # (SelectKBest(f_classif, k=6), True),
-                      # (SelectKBest(f_classif, k=8), True), #good
-                      # (SelectKBest(f_classif, k=10), True),  # good
-                      # (SelectPercentile(chi2), True),
+                      #(SelectKBest(f_classif, k=6), True), # - MB
+                      #(SelectKBest(f_classif, k=8), True), #good - MB
+                      #(SelectKBest(f_classif, k=10), True),  # good - MB
+                      #(SelectPercentile(chi2), True), # - MB
                       #(LogisticRegression(C=1, penalty="l1", solver="liblinear"), False),
                       # (LogisticRegression(C=2, penalty="l1"), False),
-                      #(LogisticRegression(C=3, penalty="l1", solver="liblinear"), False),
-                      #(RandomForestClassifier(n_estimators=2), False),
+                      #(LogisticRegression(C=3, penalty="l1", solver="liblinear"), False), # - MB
+                      #(RandomForestClassifier(n_estimators=2), False), # - MB
                       #(RandomForestClassifier(max_depth=2, max_features=5), False), # not good
                       #(RandomForestClassifier(max_depth=3, max_features=8), False),
-                      #(DecisionTreeClassifier(max_depth=4, max_features=10), False),
+                      #(DecisionTreeClassifier(max_depth=4, max_features=10), False), #-MB
                       #(DecisionTreeClassifier(max_depth=3, max_features=8), False),
-                      #(DecisionTreeClassifier(), False),
-                      (XGBClassifier(max_depth=2), False),
-                      (XGBClassifier(max_depth=5), False)
+                      #(DecisionTreeClassifier(), False), # - MB
+                      #(XGBClassifier(max_depth=2), False), # - MB
+                      (XGBClassifier(max_depth=5), False) #-MB
     ]
 
     for config, cond in configurations:
@@ -64,7 +64,7 @@ def feature_selection(train_data, train_labels):
         elif cond is True:
             train_data_c = config.fit_transform(train_data, train_labels)
             features = get_features_model(config)
-            print("FEAT ", features)
+            #print("FEAT ", features)
             outliers_removal(train_data_c, train_labels, str(config), str(features))
 
         else:
@@ -72,8 +72,25 @@ def feature_selection(train_data, train_labels):
             model = SelectFromModel(select_model, prefit=True)
             train_data_c = model.transform(train_data)
             features = get_features_model(model)
-            print("FEAT ", features)
-            outliers_removal(train_data_c, train_labels, str(model), str(features))
+            print("FEAT1 ", str(features))
+            #outliers_removal(train_data_c, train_labels, str(model), str(features))
+            #['dit', 'privateFieldsQty', 'loc', 'returnQty', 'comparisonsQty', 'assignmentsQty']
+            # ['cbo' 'lcom' 'lcom*' 'totalFieldsQty' 'staticFieldsQty' 'publicFieldsQty'
+            #  loc' 'loopQty' 'tryCatchQty' 'parenthesizedExpsQty' 'stringLiteralsQty'
+            #                                                                        'numbersQty']
+
+            if 'cbo' in str(features) and 'lcom' in str(features) and \
+                    'lcom*' in str(features) and 'totalFieldsQty' in str(features)  \
+                    and 'staticFieldsQty' in str(features) and 'publicFieldsQty' in str(features) and \
+                    'loc' in str(features) and 'loopQty' in str(features) \
+                    and 'tryCatchQty' in str(features) and 'parenthesizedExpsQty' in str(features) and \
+                 'stringLiteralsQty' in str(features) and 'numbersQty' in str(features):
+
+                print("ok")
+                print("FEAT ", str(features))
+                outliers_removal(train_data_c, train_labels, str(model), str(features))
+            else:
+                Pipeline.load_data()
 
 
     print("Pipeline DONE!")
@@ -82,10 +99,10 @@ def feature_selection(train_data, train_labels):
 def outliers_removal(train_data, train_labels, model_features, features):
     models = [
               None,
-              IsolationForest(),
-              IsolationForest(max_features=5, n_estimators=10),
-              IsolationForest(n_estimators=8),
-              IsolationForest(n_estimators=20)
+              #IsolationForest(), #- def 180
+              #IsolationForest(max_features=5, n_estimators=10), #-mut def
+              #IsolationForest(n_estimators=8),
+              #IsolationForest(n_estimators=20)
               ]
 
     list_pipes = []

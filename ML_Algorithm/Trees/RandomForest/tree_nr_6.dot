@@ -1,0 +1,17 @@
+digraph Tree {
+node [shape=box, style="filled, rounded", color="black", fontname="helvetica"] ;
+edge [fontname="helvetica"] ;
+0 [label="totalMethodsQty <= 25.5\ngini = 0.5\nsamples = 62\nvalue = [46, 48]\nclass = Branch + Output Diversity", fillcolor="#f7fbfe"] ;
+1 [label="uniqueWordsQty <= 87.0\ngini = 0.47\nsamples = 49\nvalue = [46, 29]\nclass = Branch", fillcolor="#f5d0b6"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+2 [label="numbersQty <= 12.0\ngini = 0.25\nsamples = 35\nvalue = [46, 8]\nclass = Branch", fillcolor="#ea975b"] ;
+1 -> 2 ;
+3 [label="gini = 0.0\nsamples = 4\nvalue = [0, 8]\nclass = Branch + Output Diversity", fillcolor="#399de5"] ;
+2 -> 3 ;
+4 [label="gini = 0.0\nsamples = 31\nvalue = [46, 0]\nclass = Branch", fillcolor="#e58139"] ;
+2 -> 4 ;
+5 [label="gini = 0.0\nsamples = 14\nvalue = [0, 21]\nclass = Branch + Output Diversity", fillcolor="#399de5"] ;
+1 -> 5 ;
+6 [label="gini = 0.0\nsamples = 13\nvalue = [0, 19]\nclass = Branch + Output Diversity", fillcolor="#399de5"] ;
+0 -> 6 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+}

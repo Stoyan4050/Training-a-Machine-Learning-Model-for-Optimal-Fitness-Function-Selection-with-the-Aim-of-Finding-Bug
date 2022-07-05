@@ -1,0 +1,21 @@
+digraph Tree {
+node [shape=box, style="filled, rounded", color="black", fontname="helvetica"] ;
+edge [fontname="helvetica"] ;
+0 [label="cbo <= 11.5\nentropy = 1.0\nsamples = 102\nvalue = [51, 51]\nclass = Branch", fillcolor="#ffffff"] ;
+1 [label="entropy = 0.0\nsamples = 32\nvalue = [0, 32]\nclass = Branch + Output Diversity", fillcolor="#399de5"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+2 [label="loopQty <= 8.5\nentropy = 0.84\nsamples = 70\nvalue = [51, 19]\nclass = Branch", fillcolor="#efb083"] ;
+0 -> 2 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+3 [label="tryCatchQty <= 0.5\nentropy = 0.57\nsamples = 59\nvalue = [51, 8]\nclass = Branch", fillcolor="#e99558"] ;
+2 -> 3 ;
+4 [label="entropy = 0.0\nsamples = 5\nvalue = [0, 5]\nclass = Branch + Output Diversity", fillcolor="#399de5"] ;
+3 -> 4 ;
+5 [label="tryCatchQty <= 5.5\nentropy = 0.31\nsamples = 54\nvalue = [51, 3]\nclass = Branch", fillcolor="#e78845"] ;
+3 -> 5 ;
+6 [label="entropy = 0.59\nsamples = 14\nvalue = [12, 2]\nclass = Branch", fillcolor="#e9965a"] ;
+5 -> 6 ;
+7 [label="entropy = 0.17\nsamples = 40\nvalue = [39, 1]\nclass = Branch", fillcolor="#e6843e"] ;
+5 -> 7 ;
+8 [label="entropy = 0.0\nsamples = 11\nvalue = [0, 11]\nclass = Branch + Output Diversity", fillcolor="#399de5"] ;
+2 -> 8 ;
+}

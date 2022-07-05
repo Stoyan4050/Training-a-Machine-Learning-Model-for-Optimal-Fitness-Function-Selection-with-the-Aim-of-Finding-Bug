@@ -1,0 +1,17 @@
+digraph Tree {
+node [shape=box, style="filled, rounded", color="black", fontname="helvetica"] ;
+edge [fontname="helvetica"] ;
+0 [label="loc <= 567.5\nfriedman_mse = 0.0\nsamples = 124\nvalue = -0.0", fillcolor="#eca16b"] ;
+1 [label="comparisonsQty <= 34.5\nfriedman_mse = 0.0\nsamples = 119\nvalue = 0.0", fillcolor="#eca16b"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+3 [label="returnQty <= 12.01\nfriedman_mse = 0.0\nsamples = 118\nvalue = 0.0", fillcolor="#eca16b"] ;
+1 -> 3 ;
+5 [label="friedman_mse = 0.0\nsamples = 49\nvalue = -0.4", fillcolor="#f3c5a4"] ;
+3 -> 5 ;
+6 [label="friedman_mse = 0.0\nsamples = 69\nvalue = 0.35", fillcolor="#e58139"] ;
+3 -> 6 ;
+4 [label="friedman_mse = -0.0\nsamples = 1\nvalue = -1.03", fillcolor="#ffffff"] ;
+1 -> 4 ;
+2 [label="friedman_mse = 0.0\nsamples = 5\nvalue = -0.64", fillcolor="#f8dbc7"] ;
+0 -> 2 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+}

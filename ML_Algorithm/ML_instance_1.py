@@ -26,6 +26,7 @@ from xgboost.sklearn import XGBClassifier
 from xgboost import plot_tree
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble import AdaBoostClassifier
+from sklearn.tree import plot_tree
 
 from sklearn.metrics import f1_score, accuracy_score
 from sklearn.model_selection import KFold
@@ -35,6 +36,7 @@ from sklearn.ensemble import IsolationForest
 from imblearn.pipeline import Pipeline
 from imblearn.pipeline import make_pipeline
 from imblearn.over_sampling import ADASYN, SMOTE, RandomOverSampler, SVMSMOTE
+
 
 import matplotlib.pyplot as plt
 from subprocess import call
@@ -84,7 +86,7 @@ def all_models(train_data, train_labels, feature_model, features, outlier):
         "DecisionTreeClassifier": DecisionTreeClassifier(),
         "LogisticRegression": LogisticRegression(),
         "RandomForest": RandomForestClassifier(),
-        "GradientBoost": GradientBoostingClassifier(),
+        "GradientBoost_180": GradientBoostingClassifier(),
         "XGBClassifier": XGBClassifier(),
         "AdaBoost" : AdaBoostClassifier()
 
@@ -102,8 +104,8 @@ def all_models(train_data, train_labels, feature_model, features, outlier):
     assert "RandomForest" in models and isinstance(models["RandomForest"],
                                                          RandomForestClassifier), "There is no RandomForestClassifier in models"
 
-    assert "GradientBoost" in models and isinstance(models["GradientBoost"],
-                                                         GradientBoostingClassifier), "There is no GradientBoost in models"
+    assert "GradientBoost_180" in models and isinstance(models["GradientBoost_180"],
+                                                         GradientBoostingClassifier), "There is no GradientBoost_180 in models"
 
     assert "XGBClassifier" in models and isinstance(models["XGBClassifier"],
                                                          XGBClassifier), "There is no XGBClassifier in models"
@@ -124,10 +126,19 @@ def all_models(train_data, train_labels, feature_model, features, outlier):
 
 
     data_balancing_models = ["smote", "rover"]
+    data_balancing_models = ["rover"] #- def 180
+
+
 
     sampl_strat = ["minority", "all"]
+    sampl_strat = ["minority"] #- mut def 180
+
     rover_shrinkage = [None, 0, 1, 2]
+    rover_shrinkage = [0] # def 180
+
     smote_k_neighbors = [1, 2, 3]
+    smote_k_neighbors = [3] #- mut def
+
     for balancer in data_balancing_models:
         if balancer == "rover":
             for strat in sampl_strat:
@@ -167,20 +178,21 @@ def all_models(train_data, train_labels, feature_model, features, outlier):
     # Get results
 
 def parameter_tuning(tuning, models, train_data, train_labels, pipe, features):
-    tuning.perform_Gaussian_model_tuning(models, train_data, train_labels)
-    tuning.perform_SVC_model_tuning(models, train_data, train_labels)
+    # tuning.perform_Gaussian_model_tuning(models, train_data, train_labels)
+    # tuning.perform_SVC_model_tuning(models, train_data, train_labels)
     tuning.perform_DT_model_tuning(models, train_data, train_labels)
-    tuning.perform_LR_model_tuning(models, train_data, train_labels)
-    tuning.perform_RF_model_tuning(models, train_data, train_labels)
-    tuning.perform_GBR_model_tuning(models, train_data, train_labels)
-    tuning.perform_XGB_model_tuning(models, train_data, train_labels)
-    tuning.perform_AdaBoost_model_tuning(models, train_data, train_labels)
+    # tuning.perform_LR_model_tuning(models, train_data, train_labels)
+    # tuning.perform_RF_model_tuning(models, train_data, train_labels)
+    #tuning.perform_GBR_model_tuning(models, train_data, train_labels)
+    # tuning.perform_XGB_model_tuning(models, train_data, train_labels)
+    # tuning.perform_AdaBoost_model_tuning(models, train_data, train_labels)
 
     best_classifier, best_score = get_results_from_tuning(train_data, train_labels, tuning, features)
     pipe.set_classifier(str(best_classifier))
     pipe.set_best_score(str(best_score))
 
     pipe.to_csv()
+
 
 def get_results_from_tuning(train_data, train_labels, tuning, features):
 
@@ -212,18 +224,36 @@ def get_results_from_tuning(train_data, train_labels, tuning, features):
     #     print("F1 score:", score, "\n")
 
     # print(basic_scores)
-    # createDoublePlot(tuning.hyperparameter_tuning_scores, tuning.basic_scores, ["NaiveBayes", "KNN", "SVM", "DecTree", "LogRegr", "RandomForest", "GradientBoost", "XGB"],
+    # createDoublePlot(tuning.hyperparameter_tuning_scores, tuning.basic_scores, ["NaiveBayes", "KNN", "SVM", "DecTree", "LogRegr", "RandomForest", "GradientBoost_180", "XGB"],
     #                  "Best estimators", "Estimator with basic parameters")
 
-    #createSinglePlot(tuning.hyperparameter_tuning_scores, ["NaiveBayes", "SVM", "DecTree", "LogRegr", "RandomForest", "GradientBoost", "XGB", "AdaBoost"])
+    #createSinglePlot(tuning.hyperparameter_tuning_scores, ["NaiveBayes", "SVM", "DecTree", "LogRegr", "RandomForest", "GradientBoost_180", "XGB", "AdaBoost"])
+    #print(best_estimators)
     best_model = best_estimators[np.argmax(tuning.hyperparameter_tuning_scores)]
-    #print(best_model)
 
     #plot_xgb(best_model[1], features, np.max(tuning.hyperparameter_tuning_scores))
-    #print(tuning.hyperparameter_tuning_scores)
+    print(tuning.hyperparameter_tuning_scores)
+
+    c =0
+    if tuning.hyperparameter_tuning_scores[0] > 0.87:
+        # for est in best_model[1].estimators_:
+        #     visualize_tree(est[0], features=None, name="_DEF_300_" + str(c))
+        #     c+=1
+        visualize_tree(best_model[1], features=None, name="_DEF_300_")
+
+    else:
+        pp.load_data()
+
+    #print(best_model)
+    # print("CLasses", best_model.classes_)
+    # print("Coef", best_model.coef_)
+    # print("Inter", best_model.intercept_)
+    # print("N_features", best_model.n_features_in_)
+    # print("Funct", best_model.densify())
+
+
     save_results(best_model, np.max(tuning.hyperparameter_tuning_scores), "no_data")
 
-    # visualize_tree(best_estimators[3][0], features)
     # pipe = make_pipeline(best_model[0], best_model[1])
     # pipe.fit(train_data, train_labels)
 
@@ -259,15 +289,25 @@ def save_results(estimator, score, preprocess):
 def visualize_tree(estimator, features, name=""):
     os.environ["PATH"] += os.pathsep + 'D:\\PROGRAMS\\Graphviz\\bin\\'
     print(estimator)
-    plot_tree(estimator)
-    print(features)
     # Export as dot file
+    # feature_names = ['fanout', 'protectedMethodsQty', 'stringLiteralsQty', 'anonymousClassesQty']
+
+    # feature_names = ['cbo', 'lcom*', 'totalMethodsQty', 'numbersQty', 'uniqueWordsQty','logStatementsQty']
+
+    #feature_names = ['dit', 'privateFieldsQty', 'loc', 'returnQty', 'comparisonsQty', 'assignmentsQty'] # def mut
+    feature_names = ['cbo', 'lcom', 'lcom*', 'totalFieldsQty', 'staticFieldsQty', 'publicFieldsQty', 'loc', 'loopQty',
+                     'tryCatchQty', 'parenthesizedExpsQty', 'stringLiteralsQty', 'numbersQty']
+    #feature_names = ['visibleMethodsQty', 'staticFieldsQty', 'loopQty', 'comparisonsQty', 'numbersQty', 'mathOperationsQty'] # def 180
+
+    print("VISUALIZE!!!")
+
     export_graphviz(estimator, out_file='Trees/tree'+name+'.dot',
 
                     #feature_names=["cbo", "cboModified", "fanin", "fanout", "wmc", "dit", "noc", "rfc", "lcom", "lcom*", "tcc", "lcc", "totalMethodsQty", "staticMethodsQty", "publicMethodsQty", "privateMethodsQty", "protectedMethodsQty", "defaultMethodsQty", "visibleMethodsQty", "abstractMethodsQty", "finalMethodsQty", "synchronizedMethodsQty", "totalFieldsQty", "staticFieldsQty", "publicFieldsQty", "privateFieldsQty", "protectedFieldsQty", "defaultFieldsQty", "finalFieldsQty", "synchronizedFieldsQty", "nosi", "loc", "returnQty", "loopQty", "comparisonsQty", "tryCatchQty", "parenthesizedExpsQty", "stringLiteralsQty", "numbersQty", "assignmentsQty", "mathOperationsQty", "variablesQty", "maxNestedBlocksQty", "anonymousClassesQty", "innerClassesQty", "lambdasQty", "uniqueWordsQty", "modifiers", "logStatementsQty"],
-                    feature_names=['lcom*', 'privateFieldsQty', 'tryCatchQty', 'variablesQty', 'lambdasQty'],
+                    #feature_names=['lcom*', 'privateFieldsQty', 'tryCatchQty', 'variablesQty', 'lambdasQty'],
+                    feature_names=feature_names,
                     #["WMC", "DIT", "NOC", "CBO", "RFC", "LCOM", "Ca", "Ce", "NPM", "LCOM3", "LOC", "DAM", "MOA", "MFA","CAM", "IC", "CBM", "AMC"]
-                    class_names=["Default", "Branch + Output Diversity"],
+                    class_names=["Branch", "Branch + Output Diversity"],
                     rounded=True, proportion=False,
                     precision=2, filled=True)
 
